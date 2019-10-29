@@ -1,0 +1,30 @@
+<script src="../build/EventDispatcher.js"></script>
+<script>
+
+    class Game extends EventDispatcher {
+        round = 0;
+        start = () => {
+            this.intervalId = setInterval(() => {
+                this.round++;
+                let player1Score = Math.random();
+                let player2Score = Math.random();
+                console.log(player1Score, player2Score);
+                this.dispatch(player1Score > player2Score ? '1' : '2', {
+                    player1Score,
+                    player2Score
+                });
+            }, 1000);
+        };
+    }
+
+    const game = new Game();
+
+    game.flit((eventType, target) => {
+        return game.round < 11 && eventType === '1';
+    }, (event) => {
+        console.log("Player 1 wins!!!");
+    });
+
+    game.start();
+
+</script>

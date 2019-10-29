@@ -1,0 +1,25 @@
+<script src="../build/EventDispatcher.js"></script>
+<script>
+
+    class Cat extends EventDispatcher {
+        born = () => {
+            this.intervalId = setInterval(() => {
+                console.log('Listen:');
+                this.dispatch('miao', { message: 'miao miao miao' });
+            }, 1000);
+        };
+    }
+
+    const cat = new Cat();
+
+    cat.times('miao', 3, (event) => {
+        console.log("times: ", event.target.message);
+        if (event.life === 0) {
+            console.log('the cat is dead.');
+            clearInterval(cat.intervalId);
+        }
+    });
+
+    cat.born();
+
+</script>
