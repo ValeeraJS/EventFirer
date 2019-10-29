@@ -1,0 +1,86 @@
+{
+	"name": "@valeera/eventdispatcher",
+	"version": "0.1.0",
+	"description": "Event dispatcher fit for most framework.",
+	"main": "build/EventDispatcher.js",
+	"repository": "HypnosNova/EventDispatcher",
+	"jsnext:main": "build/EventDispatcher.module.js",
+	"module": "build/EventDispatcher.module.js",
+	"types": "build/EventDispatcher.d.ts",
+	"files": [
+		"build",
+		"LICENSE",
+		"package.json",
+		"README.md",
+		"src"
+	],
+	"directories": {
+		"docs": "docs",
+		"examples": "examples",
+		"src": "src"
+	},
+	"eslintConfig": {
+		"parser": "@typescript-eslint/parser",
+		"extends": "mdcs",
+		"plugins": [
+			"html",
+			"@typescript-eslint"
+		],
+		"rules": {
+			"@typescript-eslint/no-unused-vars": 1,
+			"@typescript-eslint/indent": [
+				"error",
+				"tab",
+				{
+					"SwitchCase": 1
+				}
+			]
+		}
+	},
+	"scripts": {
+		"build": "rollup -c scripts/rollup.config.js",
+		"build-legacy": "rollup -c scripts/rollup.config.legacy.js",
+		"build-closure": "google-closure-compiler --compilation_level=ADVANCED_OPTIMIZATIONS --warning_level=VERBOSE --jscomp_off=globalThis --jscomp_off=checkTypes --externs scripts/externs.js --language_in=ECMASCRIPT_NEXT --js build/EventDispatcher.js --js_output_file build/EventDispatcher.min.js",
+		"build-examples": "rollup -c rollup-examples.config.js",
+		"dev": "concurrently --names \"ROLLUP,HTTP\" -c \"bgBlue.bold,bgGreen.bold\" \"rollup -c -w -m inline\" \"http-server -c-1 -p 8080\"",
+		"dev-test": "concurrently --names \"ROLLUP,ROLLUPTEST,HTTP\" -c \"bgBlue.bold,bgRed.bold,bgGreen.bold\" \"rollup -c -w -m inline\" \"rollup -c test/rollup.unit.config.js -w -m inline\" \"http-server -p 8080\"",
+		"start": "npm run dev",
+		"lint": "eslint src --ext js --ext ts",
+		"test": "npm run build-test && qunit test/unit/three.source.unit.js",
+		"travis": "npm run lint && npm test"
+	},
+	"keywords": [
+		"EventDispatcher",
+		"utils",
+		"module",
+		"framework"
+	],
+	"author": "hypnosnova",
+	"license": "MIT",
+	"devDependencies": {
+		"@typescript-eslint/eslint-plugin": "^2.4.0",
+		"@typescript-eslint/parser": "^2.4.0",
+		"concurrently": "^5.0.0",
+		"eslint": "^6.5.1",
+		"eslint-plugin-html": "^6.0.0",
+		"google-closure-compiler": "20190929.0.0",
+		"http-server": "^0.11.1",
+		"qunit": "^2.9.3",
+		"rollup": "^1.26.0",
+		"rollup-plugin-json": "^4.0.0",
+		"rollup-plugin-typescript2": "^0.24.3",
+		"typescript": "^3.6.4"
+	},
+	"jspm": {
+		"files": [
+			"package.json",
+			"LICENSE",
+			"README.md",
+			"build/valeera.js",
+			"build/valeera.min.js",
+			"build/valeera.module.js"
+		],
+		"directories": {}
+	},
+	"dependencies": {}
+}
