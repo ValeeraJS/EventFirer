@@ -34,3 +34,4 @@ Thumbs.db
 /output
 
 /src/**/*.js
+/src/**/*.d.ts
