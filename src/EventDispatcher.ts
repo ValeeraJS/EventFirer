@@ -29,9 +29,10 @@ export default class EventDispatcher implements IEventDispatcher {
 
     public clearAll = () => {
         const keys = this.listeners.keys();
-        for (let key in keys) {
+        for (let key of keys) {
             this.listeners.delete(key);
         }
+        return this;
     }
 
     public dispatch = (eventKey: any, target: any) => {
