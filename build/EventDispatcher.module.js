@@ -17,9 +17,10 @@ class EventDispatcher {
         };
         this.clearAll = () => {
             const keys = this.listeners.keys();
-            for (let key in keys) {
+            for (let key of keys) {
                 this.listeners.delete(key);
             }
+            return this;
         };
         this.dispatch = (eventKey, target) => {
             const array = this.listeners.get(eventKey) || [];

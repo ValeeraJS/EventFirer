@@ -10,7 +10,7 @@ export default class EventDispatcher implements IEventDispatcher {
     private listeners;
     all: (listener: TListener) => this;
     clear: (eventKey: any) => this;
-    clearAll: () => void;
+    clearAll: () => this;
     dispatch: (eventKey: any, target: any) => this;
     flit: (rule: Function, listener: TListener) => this;
     off: (eventKey: any, listener: TListener) => this;
