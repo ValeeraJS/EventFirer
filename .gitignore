@@ -28,10 +28,12 @@ Thumbs.db
 
 
 .idea
+/coverage
 /doc
 /dist
 /dll
 /output
+/.nyc_output
 
 /src/**/*.js
 /src/**/*.d.ts
