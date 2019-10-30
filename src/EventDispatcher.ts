@@ -36,7 +36,7 @@ export default class EventDispatcher implements IEventDispatcher {
 
     public dispatch = (eventKey: any, target: any) => {
         const array: TListenersValue = this.listeners.get(eventKey) || [];
-        const len = array.length;
+        let len = array.length;
         let item: TListenerItem;
         for (let i = 0; i < len; i++) {
             item = array[i];
@@ -46,7 +46,8 @@ export default class EventDispatcher implements IEventDispatcher {
                 life: --item.times
             });
             if (item.times <= 0) {
-                array.splice(i, 1);
+                array.splice(i--, 1);
+                --len;
             }
         }
         return this.checkFlit(eventKey, target);
