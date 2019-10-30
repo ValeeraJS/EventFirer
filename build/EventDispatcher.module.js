@@ -23,7 +23,7 @@ class EventDispatcher {
         };
         this.dispatch = (eventKey, target) => {
             const array = this.listeners.get(eventKey) || [];
-            const len = array.length;
+            let len = array.length;
             let item;
             for (let i = 0; i < len; i++) {
                 item = array[i];
@@ -33,7 +33,8 @@ class EventDispatcher {
                     life: --item.times
                 });
                 if (item.times <= 0) {
-                    array.splice(i, 1);
+                    array.splice(i--, 1);
+                    --len;
                 }
             }
             return this.checkFlit(eventKey, target);
