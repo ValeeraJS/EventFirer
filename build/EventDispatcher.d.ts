@@ -1,21 +1,24 @@
 import IEventDispatcher, { TListener } from "./interfaces/IEventDispatcher";
 export default class EventDispatcher implements IEventDispatcher {
+    private eventKeyList;
     /**
      * store all the filters
      */
-    private flitters;
+    private filters;
     /**
      * store all the listeners by key
      */
     private listeners;
+    protected constructor(eventKeyList?: any[]);
     all: (listener: TListener) => this;
     clear: (eventKey: any) => this;
     clearAll: () => this;
     dispatch: (eventKey: any, target: any) => this;
-    flit: (rule: Function, listener: TListener) => this;
+    filt: (rule: Function, listener: TListener) => this;
     off: (eventKey: any, listener: TListener) => this;
     on: (eventKey: any, listener: TListener) => this;
     once: (eventKey: any, listener: TListener) => this;
     times: (eventKey: any, times: number, listener: TListener) => this;
-    private checkFlit;
+    private checkFilt;
+    private checkEventKeyAvailable;
 }

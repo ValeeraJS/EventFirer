@@ -1,15 +1,15 @@
 class EventDispatcher {
-    constructor() {
+    constructor(eventKeyList = []) {
         /**
          * store all the filters
          */
-        this.flitters = [];
+        this.filters = [];
         /**
          * store all the listeners by key
          */
         this.listeners = new Map();
         this.all = (listener) => {
-            return this.flit(() => true, listener);
+            return this.filt(() => true, listener);
         };
         this.clear = (eventKey) => {
             this.listeners.delete(eventKey);
@@ -23,6 +23,10 @@ class EventDispatcher {
             return this;
         };
         this.dispatch = (eventKey, target) => {
+            if (!this.checkEventKeyAvailable(eventKey)) {
+                console.error("EventDispatcher couldn't dispatch the event since EventKeyList doesn't contains key: ", eventKey);
+                return this;
+            }
             const array = this.listeners.get(eventKey) || [];
             let len = array.length;
             let item;
@@ -38,10 +42,10 @@ class EventDispatcher {
                     --len;
                 }
             }
-            return this.checkFlit(eventKey, target);
+            return this.checkFilt(eventKey, target);
         };
-        this.flit = (rule, listener) => {
-            this.flitters.push({
+        this.filt = (rule, listener) => {
+            this.filters.push({
                 rule,
                 listener
             });
@@ -68,6 +72,10 @@ class EventDispatcher {
             return this.times(eventKey, 1, listener);
         };
         this.times = (eventKey, times, listener) => {
+            if (!this.checkEventKeyAvailable(eventKey)) {
+                console.error("EventDispatcher couldn't add the listener: ", listener, "since EventKeyList doesn't contains key: ", eventKey);
+                return this;
+            }
             let array = this.listeners.get(eventKey) || [];
             if (!this.listeners.has(eventKey)) {
                 this.listeners.set(eventKey, array);
@@ -78,8 +86,8 @@ class EventDispatcher {
             });
             return this;
         };
-        this.checkFlit = (eventKey, target) => {
-            for (let item of this.flitters) {
+        this.checkFilt = (eventKey, target) => {
+            for (let item of this.filters) {
                 if (item.rule(eventKey, target)) {
                     item.listener({
                         eventKey,
@@ -90,6 +98,15 @@ class EventDispatcher {
             }
             return this;
         };
+        this.checkEventKeyAvailable = (eventKey) => {
+            if (this.eventKeyList.length) {
+                if (!this.eventKeyList.includes(eventKey)) {
+                    return false;
+                }
+            }
+            return true;
+        };
+        this.eventKeyList = eventKeyList;
     }
 }
 
