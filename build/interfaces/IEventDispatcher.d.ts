@@ -32,7 +32,7 @@ export default interface IEventDispatcher {
     /**
      * judge the event key and target arrording to the custom rule
      */
-    flit: (rule: Function, listener: TListener) => this;
+    filt: (rule: Function, listener: TListener) => this;
     /**
      * add an event listener
      */
