@@ -19,7 +19,7 @@
 
     const game = new Game();
 
-    game.flit((eventType, target) => {
+    game.filt((eventType, target) => {
         return game.round < 11 && eventType === '1';
     }, (event) => {
         console.log("Player 1 wins!!!");
