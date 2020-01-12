@@ -1,25 +1,29 @@
 import IEventDispatcher, { TListener, TListenersValue, TListenerItem } from "./interfaces/IEventDispatcher";
 
-type TFlitter = {
+type TFilter = {
     rule: Function,
     listener: TListener
 }
 
 export default class EventDispatcher implements IEventDispatcher {
 
+    private eventKeyList: any[];
     /**
      * store all the filters
      */
-    private flitters: Array<TFlitter> = [];
+    private filters: TFilter[] = [];
 
     /**
      * store all the listeners by key
      */
     private listeners: Map<any, TListenersValue> = new Map();
 
+    protected constructor(eventKeyList: any[] = []){
+        this.eventKeyList = eventKeyList;
+    }
 
     public all = (listener: TListener) => {
-        return this.flit(() => true, listener);
+        return this.filt(() => true, listener);
     }
 
     public clear = (eventKey: any) => {
@@ -36,6 +40,10 @@ export default class EventDispatcher implements IEventDispatcher {
     }
 
     public dispatch = (eventKey: any, target: any) => {
+        if (!this.checkEventKeyAvailable(eventKey)) {
+            console.error("EventDispatcher couldn't dispatch the event since EventKeyList doesn't contains key: ", eventKey);
+            return this;
+        }
         const array: TListenersValue = this.listeners.get(eventKey) || [];
         let len = array.length;
         let item: TListenerItem;
@@ -51,11 +59,11 @@ export default class EventDispatcher implements IEventDispatcher {
                 --len;
             }
         }
-        return this.checkFlit(eventKey, target);
+        return this.checkFilt(eventKey, target);
     }
 
-    public flit = (rule: Function, listener: TListener) => {
-        this.flitters.push({
+    public filt = (rule: Function, listener: TListener) => {
+        this.filters.push({
             rule,
             listener
         });
@@ -86,6 +94,10 @@ export default class EventDispatcher implements IEventDispatcher {
     }
 
     public times = (eventKey: any, times: number, listener: TListener) => {
+        if (!this.checkEventKeyAvailable(eventKey)) {
+            console.error("EventDispatcher couldn't add the listener: ", listener, "since EventKeyList doesn't contains key: ", eventKey);
+            return this;
+        }
         let array: TListenersValue = this.listeners.get(eventKey) || [];
         if (!this.listeners.has(eventKey)) {
             this.listeners.set(eventKey, array);
@@ -97,8 +109,8 @@ export default class EventDispatcher implements IEventDispatcher {
         return this;
     }
 
-    private checkFlit = (eventKey: any, target: any) => {
-        for (let item of this.flitters) {
+    private checkFilt = (eventKey: any, target: any) => {
+        for (let item of this.filters) {
             if (item.rule(eventKey, target)) {
                 item.listener({
                     eventKey,
@@ -110,4 +122,12 @@ export default class EventDispatcher implements IEventDispatcher {
         return this;
     }
 
+    private checkEventKeyAvailable = (eventKey: any) => {
+        if (this.eventKeyList.length) {
+            if (!this.eventKeyList.includes(eventKey)) {
+                return false;
+            }
+        }
+        return true;
+    }
 }

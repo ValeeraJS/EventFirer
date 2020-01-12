@@ -1,5 +1,5 @@
 var EventDispatcher;
 var on;
-var flit;
+var filt;
 var off;
 var dispatch;

@@ -31,18 +31,19 @@
 	}
 
 	var EventDispatcher = /** @class */ (function () {
-	    function EventDispatcher() {
+	    function EventDispatcher(eventKeyList) {
 	        var _this = this;
+	        if (eventKeyList === void 0) { eventKeyList = []; }
 	        /**
 	         * store all the filters
 	         */
-	        this.flitters = [];
+	        this.filters = [];
 	        /**
 	         * store all the listeners by key
 	         */
 	        this.listeners = new Map();
 	        this.all = function (listener) {
-	            return _this.flit(function () { return true; }, listener);
+	            return _this.filt(function () { return true; }, listener);
 	        };
 	        this.clear = function (eventKey) {
 	            _this.listeners.delete(eventKey);
@@ -67,6 +68,10 @@
 	            return _this;
 	        };
 	        this.dispatch = function (eventKey, target) {
+	            if (!_this.checkEventKeyAvailable(eventKey)) {
+	                console.error("EventDispatcher couldn't dispatch the event since EventKeyList doesn't contains key: ", eventKey);
+	                return _this;
+	            }
 	            var array = _this.listeners.get(eventKey) || [];
 	            var len = array.length;
 	            var item;
@@ -82,10 +87,10 @@
 	                    --len;
 	                }
 	            }
-	            return _this.checkFlit(eventKey, target);
+	            return _this.checkFilt(eventKey, target);
 	        };
-	        this.flit = function (rule, listener) {
-	            _this.flitters.push({
+	        this.filt = function (rule, listener) {
+	            _this.filters.push({
 	                rule: rule,
 	                listener: listener
 	            });
@@ -112,6 +117,10 @@
 	            return _this.times(eventKey, 1, listener);
 	        };
 	        this.times = function (eventKey, times, listener) {
+	            if (!_this.checkEventKeyAvailable(eventKey)) {
+	                console.error("EventDispatcher couldn't add the listener: ", listener, "since EventKeyList doesn't contains key: ", eventKey);
+	                return _this;
+	            }
 	            var array = _this.listeners.get(eventKey) || [];
 	            if (!_this.listeners.has(eventKey)) {
 	                _this.listeners.set(eventKey, array);
@@ -122,10 +131,10 @@
 	            });
 	            return _this;
 	        };
-	        this.checkFlit = function (eventKey, target) {
+	        this.checkFilt = function (eventKey, target) {
 	            var e_2, _a;
 	            try {
-	                for (var _b = __values(_this.flitters), _c = _b.next(); !_c.done; _c = _b.next()) {
+	                for (var _b = __values(_this.filters), _c = _b.next(); !_c.done; _c = _b.next()) {
 	                    var item = _c.value;
 	                    if (item.rule(eventKey, target)) {
 	                        item.listener({
@@ -145,6 +154,15 @@
 	            }
 	            return _this;
 	        };
+	        this.checkEventKeyAvailable = function (eventKey) {
+	            if (_this.eventKeyList.length) {
+	                if (!_this.eventKeyList.includes(eventKey)) {
+	                    return false;
+	                }
+	            }
+	            return true;
+	        };
+	        this.eventKeyList = eventKeyList;
 	    }
 	    return EventDispatcher;
 	}());

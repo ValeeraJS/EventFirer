@@ -3,7 +3,7 @@ import { expect, should } from 'chai';
 
 describe('normal event listener', function () {
 
-    let tmpEventOnTest, tmpEventAll, tmpEventFlit;
+    let tmpEventOnTest, tmpEventAll, tmpEventfilt;
     const dispatcher = new EventDispatcher();
     function onTest (event) {
         tmpEventOnTest = event;
@@ -56,36 +56,53 @@ describe('normal event listener', function () {
         })).to.equal(dispatcher);
     });
 
-    it('test chain "flit": ', function () {
-        expect(dispatcher.flit((eventKey, event) => {
+    it('test chain "filt": ', function () {
+        expect(dispatcher.filt((eventKey, event) => {
             it('should be called: ', function () {
                 eventKey.should.be.equal('test');
                 event.should.have.property('target', 123);
             });
             return true;
         }, function(event) {
-            tmpEventFlit = event;
-            it('should be called "flit": ', function () {
-                tmpEventFlit.should.have.property('times', Infinity);
-                tmpEventFlit.should.have.property('target', 1253);
-                tmpEventFlit.should.have.property('eventKey', 'test');
+            tmpEventfilt = event;
+            it('should be called "filt": ', function () {
+                tmpEventfilt.should.have.property('times', Infinity);
+                tmpEventfilt.should.have.property('target', 1253);
+                tmpEventfilt.should.have.property('eventKey', 'test');
             });
         })).to.equal(dispatcher);
     });
 
-    it('test chain "flit": ', function () {
-        expect(dispatcher.flit((eventKey, event) => {
+    it('test chain "filt": ', function () {
+        expect(dispatcher.filt((eventKey, event) => {
             it('should be called: ', function () {
                 eventKey.should.be.equal('test');
                 event.should.have.property('target', 123);
             });
             return false;
         }, function(event) {
-            tmpEventFlit = event;
-            it('should be called "flit": ', function () {
-                tmpEventFlit.should.have.property('times', Infinity);
-                tmpEventFlit.should.have.property('target', 1253);
-                tmpEventFlit.should.have.property('eventKey', 'test');
+            tmpEventfilt = event;
+            it('should be called "filt": ', function () {
+                tmpEventfilt.should.have.property('times', Infinity);
+                tmpEventfilt.should.have.property('target', 1253);
+                tmpEventfilt.should.have.property('eventKey', 'test');
+            });
+        })).to.equal(dispatcher);
+    });
+
+    it('test chain "all": ', function () {
+        expect(dispatcher.all((event) => {
+            it('should be called: ', function () {
+                eventKey.should.be.equal('test');
+                event.should.have.property('target', 123);
+            });
+            return false;
+        }, function(event) {
+            tmpEventfilt = event;
+            it('should be called "all": ', function () {
+                tmpEventfilt.should.have.property('times', Infinity);
+                tmpEventfilt.should.have.property('target', 1253);
+                tmpEventfilt.should.have.property('eventKey', 'test');
             });
         })).to.equal(dispatcher);
     });
@@ -152,5 +169,15 @@ describe('normal event listener', function () {
         expect(dispatcher.dispatch('abc', 123)).to.equal(dispatcher);
     });
 
+    const dispatcher2 = new EventDispatcher(['hello']);
+    it('not listened', function () {
+        expect(dispatcher2.checkEventKeyAvailable('hello')).to.equal(true);
+        expect(dispatcher2.checkEventKeyAvailable('hello2')).to.equal(false);
 
+        expect(dispatcher2.dispatch('hello', 123)).to.equal(dispatcher2);
+        expect(dispatcher2.dispatch('hello2', 123)).to.equal(dispatcher2);
+
+        expect(dispatcher2.on('hello', () => {})).to.equal(dispatcher2);
+        expect(dispatcher2.on('hello2', () => {})).to.equal(dispatcher2);
+    });
 });
