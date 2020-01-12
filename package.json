@@ -1,6 +1,6 @@
 {
 	"name": "@valeera/eventdispatcher",
-	"version": "0.1.1",
+	"version": "1.0.0",
 	"description": "Event dispatcher fit for most framework.",
 	"main": "build/EventDispatcher.js",
 	"repository": "ValeeraJS/EventDispatcher",
@@ -70,7 +70,7 @@
 		"http-server": "^0.12.0",
 		"mocha": "6.2.2",
 		"nyc": "15.0.0",
-		"rollup": "^1.27.14",
+		"rollup": "^1.29.0",
 		"rollup-plugin-json": "^4.0.0",
 		"rollup-plugin-typescript2": "^0.25.3",
 		"typescript": "^3.7.4"
