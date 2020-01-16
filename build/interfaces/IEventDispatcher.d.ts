@@ -6,7 +6,7 @@ export declare type TEvent = {
     target: any;
     life: number;
 };
-export declare type TListener = (event: TEvent) => {};
+export declare type TListener = (event: TEvent) => any;
 export declare type TListenerItem = {
     listener: TListener;
     times: number;

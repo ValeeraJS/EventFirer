@@ -7,7 +7,7 @@ export type TEvent = {
     life: number;
 };
 
-export type TListener = (event: TEvent) => {};
+export type TListener = (event: TEvent) => any;
 
 export type TListenerItem = {
     listener: TListener,
