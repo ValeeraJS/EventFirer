@@ -33,7 +33,7 @@ yarn add @valeera/eventdispatcher
     }).flit((type) => {
         return type.indexOf('car') > -1;
     }, (event) => {
-        console.log('flit: ', event.target.message);
+        console.log('filt: ', event.target.message);
     }).all((event) => {
         console.log('all: ', event.target.message);
     });
@@ -46,11 +46,11 @@ yarn add @valeera/eventdispatcher
 In broswer console, you could see:
 ```
 on:  aaa
-flit:  aaa
+filt:  aaa
 all:  aaa
-flit:  bbb
+filt:  bbb
 all:  bbb
-flit:  ccc
+filt:  ccc
 all:  ccc
 all:  111
 all:  222
