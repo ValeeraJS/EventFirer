@@ -30,7 +30,7 @@ yarn add @valeera/eventdispatcher
 
     car.on('car-a', function (event) {
         console.log("on: ", event.target.message)
-    }).flit((type) => {
+    }).filt((type) => {
         return type.indexOf('car') > -1;
     }, (event) => {
         console.log('filt: ', event.target.message);
