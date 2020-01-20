@@ -16,7 +16,7 @@ yarn add @valeera/eventdispatcher
 <script src="EventDispatcher.js"></script>
 <script>
 
-	class Car extends EventDispatcher {
+    class Car extends EventDispatcher {
         start = () => {
             this.dispatch('car-a', {message: 'aaa'});
             this.dispatch('car-b', {message: 'bbb'});
