@@ -40,7 +40,7 @@
 	"scripts": {
 		"build": "rollup -c scripts/rollup.config.js",
 		"build-legacy": "rollup -c scripts/rollup.config.legacy.js",
-		"build-closure": "google-closure-compiler --compilation_level=ADVANCED_OPTIMIZATIONS --warning_level=VERBOSE --jscomp_off=globalThis --jscomp_off=checkTypes --externs scripts/externs.js --language_in=ECMASCRIPT_NEXT --js build/EventDispatcher.js --js_output_file build/EventDispatcher.min.js",
+		"build-closure": "google-closure-compiler --compilation_level=ADVANCED_OPTIMIZATIONS --warning_level=VERBOSE --jscomp_off=globalThis --jscomp_off=checkTypes --externs scripts/externs.js --language_in=ECMASCRIPT_NEXT --language_out=ECMASCRIPT_NEXT --js build/EventDispatcher.js --js_output_file build/EventDispatcher.min.js",
 		"build-closure-legacy": "google-closure-compiler --compilation_level=ADVANCED_OPTIMIZATIONS --warning_level=VERBOSE --jscomp_off=globalThis --jscomp_off=checkTypes --externs scripts/externs.js --language_in=ECMASCRIPT5 --js build/EventDispatcher.legacy.js --js_output_file build/EventDispatcher.legacy.min.js",
 		"build-all": "npm run build && npm run build-legacy && npm run build-closure && npm run build-closure-legacy",
 		"start": "npm run dev",
@@ -66,7 +66,7 @@
 		"eslint": "^6.8.0",
 		"eslint-plugin-html": "^6.0.0",
 		"esm": "^3.2.25",
-		"google-closure-compiler": "20191111.0.0",
+		"google-closure-compiler": "20200224.0.0",
 		"http-server": "^0.12.0",
 		"mocha": "6.2.2",
 		"nyc": "15.0.0",

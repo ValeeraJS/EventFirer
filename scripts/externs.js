@@ -1,5 +1,10 @@
-var EventDispatcher;
-var on;
-var filt;
-var off;
-var dispatch;
+var EventDispatcher = function(eventKeyList) {};
+EventDispatcher.prototype.all;
+EventDispatcher.prototype.clear;
+EventDispatcher.prototype.clearAll;
+EventDispatcher.prototype.dispatch ;
+EventDispatcher.prototype.filt ;
+EventDispatcher.prototype.off ;
+EventDispatcher.prototype.on ;
+EventDispatcher.prototype.once ;
+EventDispatcher.prototype.times;
