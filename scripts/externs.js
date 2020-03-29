@@ -1,8 +1,8 @@
 var EventDispatcher = function(eventKeyList) {};
 EventDispatcher.prototype.all;
-EventDispatcher.prototype.clear;
-EventDispatcher.prototype.clearAll;
-EventDispatcher.prototype.dispatch ;
+EventDispatcher.prototype.clearListenersByKey;
+EventDispatcher.prototype.clearAllListeners;
+EventDispatcher.prototype.dispatchEvent ;
 EventDispatcher.prototype.filt ;
 EventDispatcher.prototype.off ;
 EventDispatcher.prototype.on ;

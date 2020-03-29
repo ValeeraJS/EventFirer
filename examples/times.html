@@ -5,7 +5,7 @@
         born = () => {
             this.intervalId = setInterval(() => {
                 console.log('Listen:');
-                this.dispatch('miao', { message: 'miao miao miao' });
+                this.dispatchEvent('miao', { message: 'miao miao miao' });
             }, 1000);
         };
     }

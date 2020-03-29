@@ -3,11 +3,11 @@
 
     class Car extends EventDispatcher {
         start = () => {
-            this.dispatch('car', {message: 'aaa'});
-            this.dispatch('car', {message: 'can\'t listen'});
-            this.dispatch('bus', {message: 'bbb'});
-            this.dispatch('bus', {message: 'ccc'});
-            this.dispatch('bus', {message: 'can\'t listen'});
+            this.dispatchEvent('car', {message: 'aaa'});
+            this.dispatchEvent('car', {message: 'can\'t listen'});
+            this.dispatchEvent('bus', {message: 'bbb'});
+            this.dispatchEvent('bus', {message: 'ccc'});
+            this.dispatchEvent('bus', {message: 'can\'t listen'});
         };
     }
 

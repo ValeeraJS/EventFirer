@@ -9,7 +9,7 @@
                 let player1Score = Math.random();
                 let player2Score = Math.random();
                 console.log(player1Score, player2Score);
-                this.dispatch(player1Score > player2Score ? '1' : '2', {
+                this.dispatchEvent(player1Score > player2Score ? '1' : '2', {
                     player1Score,
                     player2Score
                 });

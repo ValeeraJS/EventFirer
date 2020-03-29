@@ -18,11 +18,11 @@ yarn add @valeera/eventdispatcher
 
     class Car extends EventDispatcher {
         start = () => {
-            this.dispatch('car-a', {message: 'aaa'});
-            this.dispatch('car-b', {message: 'bbb'});
-            this.dispatch('car-c', {message: 'ccc'});
-            this.dispatch('bus-1', {message: '111'});
-            this.dispatch('bus-2', {message: '222'});
+            this.dispatchEvent('car-a', {message: 'aaa'});
+            this.dispatchEvent('car-b', {message: 'bbb'});
+            this.dispatchEvent('car-c', {message: 'ccc'});
+            this.dispatchEvent('bus-1', {message: '111'});
+            this.dispatchEvent('bus-2', {message: '222'});
         };
     }
 
