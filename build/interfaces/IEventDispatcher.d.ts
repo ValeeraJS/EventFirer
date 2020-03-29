@@ -20,15 +20,15 @@ export default interface IEventDispatcher {
     /**
      * remove all listeners according to event key
      */
-    clear: (eventKey: any) => this;
+    clearListenersByKey: (eventKey: any) => this;
     /**
      * remove all listeners
      */
-    clearAll: () => void;
+    clearAllListeners: () => void;
     /**
      * dispatch a custom event
      */
-    dispatch: (eventKey: any, target: TEvent) => this;
+    dispatchEvent: (eventKey: any, target: TEvent) => this;
     /**
      * judge the event key and target arrording to the custom rule
      */

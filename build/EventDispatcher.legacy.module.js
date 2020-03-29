@@ -39,11 +39,11 @@ var EventDispatcher = /** @class */ (function () {
         this.all = function (listener) {
             return _this.filt(function () { return true; }, listener);
         };
-        this.clear = function (eventKey) {
+        this.clearListenersByKey = function (eventKey) {
             _this.listeners.delete(eventKey);
             return _this;
         };
-        this.clearAll = function () {
+        this.clearAllListeners = function () {
             var e_1, _a;
             var keys = _this.listeners.keys();
             try {
@@ -61,7 +61,7 @@ var EventDispatcher = /** @class */ (function () {
             }
             return _this;
         };
-        this.dispatch = function (eventKey, target) {
+        this.dispatchEvent = function (eventKey, target) {
             if (!_this.checkEventKeyAvailable(eventKey)) {
                 console.error("EventDispatcher couldn't dispatch the event since EventKeyList doesn't contains key: ", eventKey);
                 return _this;

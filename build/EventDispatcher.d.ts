@@ -11,9 +11,9 @@ export default class EventDispatcher implements IEventDispatcher {
     private listeners;
     protected constructor(eventKeyList?: any[]);
     all: (listener: TListener) => this;
-    clear: (eventKey: any) => this;
-    clearAll: () => this;
-    dispatch: (eventKey: any, target: any) => this;
+    clearListenersByKey: (eventKey: any) => this;
+    clearAllListeners: () => this;
+    dispatchEvent: (eventKey: any, target: any) => this;
     filt: (rule: Function, listener: TListener) => this;
     off: (eventKey: any, listener: TListener) => this;
     on: (eventKey: any, listener: TListener) => this;

@@ -17,18 +17,18 @@
 	        this.all = (listener) => {
 	            return this.filt(() => true, listener);
 	        };
-	        this.clear = (eventKey) => {
+	        this.clearListenersByKey = (eventKey) => {
 	            this.listeners.delete(eventKey);
 	            return this;
 	        };
-	        this.clearAll = () => {
+	        this.clearAllListeners = () => {
 	            const keys = this.listeners.keys();
 	            for (let key of keys) {
 	                this.listeners.delete(key);
 	            }
 	            return this;
 	        };
-	        this.dispatch = (eventKey, target) => {
+	        this.dispatchEvent = (eventKey, target) => {
 	            if (!this.checkEventKeyAvailable(eventKey)) {
 	                console.error("EventDispatcher couldn't dispatch the event since EventKeyList doesn't contains key: ", eventKey);
 	                return this;
