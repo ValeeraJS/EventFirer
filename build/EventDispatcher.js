@@ -125,11 +125,6 @@
 	};
 	var EventDispatcher = mixin(Object);
 
-	class A extends EventDispatcher.mixin() {
-	}
-	window.A = A;
-	console.log(A);
-
 	return EventDispatcher;
 
 })));

@@ -119,10 +119,5 @@ const mixin = (Base = Object, eventKeyList = []) => {
 };
 var EventDispatcher = mixin(Object);
 
-class A extends EventDispatcher.mixin() {
-}
-window.A = A;
-console.log(A);
-
 export default EventDispatcher;
 //# sourceMappingURL=EventDispatcher.module.js.map
