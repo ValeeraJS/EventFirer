@@ -1,133 +1,165 @@
-import IEventDispatcher, { TListener, TListenersValue, TListenerItem } from "./interfaces/IEventDispatcher";
+import IEventDispatcher, {
+	IEvent,
+	IListenerItem,
+	TEventKey,
+	TFilter,
+	TListener,
+	TListenersValue
+} from "./interfaces/IEventDispatcher";
 
-type TFilter = {
-	rule: Function;
-	listener: TListener;
-}
+type Constructor<T = {}> = new (...a: any[]) => T;
 
-export default class EventDispatcher implements IEventDispatcher {
+// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
+export const mixin = <TBase extends Constructor>(
+	Base: TBase = Object as any,
+	eventKeyList: TEventKey[] = []
+) => {
+	return class EventDispatcher extends Base implements IEventDispatcher {
+		public static mixin = mixin;
+		// eslint-disable-next-line @typescript-eslint/explicit-member-accessibility
+		eventKeyList: TEventKey[] = eventKeyList;
+		/**
+		 * store all the filters
+		 */
+		// eslint-disable-next-line @typescript-eslint/explicit-member-accessibility
+		filters: TFilter[] = [];
 
-	private eventKeyList: any[];
-	/**
-	 * store all the filters
-	 */
-	private filters: TFilter[] = [];
+		/**
+		 * store all the listeners by key
+		 */
+		// eslint-disable-next-line @typescript-eslint/explicit-member-accessibility
+		listeners: Map<TEventKey, TListenersValue> = new Map();
 
-	/**
-	 * store all the listeners by key
-	 */
-	private listeners: Map<any, TListenersValue> = new Map();
+		public all = (listener: TListener) => {
+			return this.filt(() => true, listener);
+		};
 
-	protected constructor(eventKeyList: any[] = []) {
-		this.eventKeyList = eventKeyList;
-	}
+		public clearListenersByKey = (eventKey: TEventKey) => {
+			this.listeners.delete(eventKey);
 
-	public all = (listener: TListener) => {
-		return this.filt(() => true, listener);
-	}
-
-	public clearListenersByKey = (eventKey: any) => {
-		this.listeners.delete(eventKey);
-		return this;
-	}
-
-	public clearAllListeners = () => {
-		const keys = this.listeners.keys();
-		for (let key of keys) {
-			this.listeners.delete(key);
-		}
-		return this;
-	}
-
-	public dispatchEvent = (eventKey: any, target: any) => {
-		if (!this.checkEventKeyAvailable(eventKey)) {
-			console.error("EventDispatcher couldn't dispatch the event since EventKeyList doesn't contains key: ", eventKey);
 			return this;
-		}
-		const array: TListenersValue = this.listeners.get(eventKey) || [];
-		let len = array.length;
-		let item: TListenerItem;
-		for (let i = 0; i < len; i++) {
-			item = array[i];
-			item.listener({
-				eventKey,
-				target,
-				life: --item.times
-			});
-			if (item.times <= 0) {
-				array.splice(i--, 1);
-				--len;
+		};
+
+		public clearAllListeners = () => {
+			const keys = this.listeners.keys();
+
+			for (const key of keys) {
+				this.listeners.delete(key);
 			}
-		}
-		return this.checkFilt(eventKey, target);
-	}
 
-	public filt = (rule: Function, listener: TListener) => {
-		this.filters.push({
-			rule,
-			listener
-		});
-		return this;
-	}
-
-	public off = (eventKey: any, listener: TListener) => {
-		const array: TListenersValue | undefined = this.listeners.get(eventKey);
-		if (!array) {
 			return this;
-		}
-		const len = array.length;
-		for (let i = 0; i < len; i++) {
-			if (array[i].listener === listener) {
-				array.splice(i, 1);
-				break;
+		};
+
+		public dispatchEvent = (eventKey: TEventKey, target: IEvent) => {
+			if (!this.checkEventKeyAvailable(eventKey)) {
+				console.error(
+					"EventDispatcher couldn't dispatch the event since EventKeyList doesn't contains key: ",
+					eventKey
+				);
+
+				return this;
 			}
-		}
-		return this;
-	}
+			const array: TListenersValue = this.listeners.get(eventKey) || [];
+			let len = array.length;
+			let item: IListenerItem;
 
-	public on = (eventKey: any, listener: TListener) => {
-		return this.times(eventKey, Infinity, listener);
-	}
-
-	public once = (eventKey: any, listener: TListener) => {
-		return this.times(eventKey, 1, listener);
-	}
-
-	public times = (eventKey: any, times: number, listener: TListener) => {
-		if (!this.checkEventKeyAvailable(eventKey)) {
-			console.error("EventDispatcher couldn't add the listener: ", listener, "since EventKeyList doesn't contains key: ", eventKey);
-			return this;
-		}
-		let array: TListenersValue = this.listeners.get(eventKey) || [];
-		if (!this.listeners.has(eventKey)) {
-			this.listeners.set(eventKey, array);
-		}
-		array.push({
-			listener,
-			times
-		});
-		return this;
-	}
-
-	private checkFilt = (eventKey: any, target: any) => {
-		for (let item of this.filters) {
-			if (item.rule(eventKey, target)) {
+			for (let i = 0; i < len; i++) {
+				item = array[i];
 				item.listener({
 					eventKey,
-					target,
-					life: Infinity
+					life: --item.times,
+					target
 				});
+				if (item.times <= 0) {
+					array.splice(i--, 1);
+					--len;
+				}
 			}
-		}
-		return this;
-	}
 
-	private checkEventKeyAvailable = (eventKey: any) => {
-		if (this.eventKeyList.length) {
-			if (!this.eventKeyList.includes(eventKey)) {
-				return false;
+			return this.checkFilt(eventKey, target);
+		};
+
+		public filt = (rule: Function, listener: TListener) => {
+			this.filters.push({
+				listener,
+				rule
+			});
+
+			return this;
+		};
+
+		public off = (eventKey: TEventKey, listener: TListener) => {
+			const array: TListenersValue | undefined = this.listeners.get(eventKey);
+
+			if (!array) {
+				return this;
 			}
-		}
-		return true;
-	}
-}
+			const len = array.length;
+
+			for (let i = 0; i < len; i++) {
+				if (array[i].listener === listener) {
+					array.splice(i, 1);
+					break;
+				}
+			}
+
+			return this;
+		};
+
+		public on = (eventKey: TEventKey, listener: TListener) => {
+			return this.times(eventKey, Infinity, listener);
+		};
+
+		public once = (eventKey: TEventKey, listener: TListener) => {
+			return this.times(eventKey, 1, listener);
+		};
+
+		public times = (eventKey: TEventKey, times: number, listener: TListener) => {
+			if (!this.checkEventKeyAvailable(eventKey)) {
+				console.error(
+					"EventDispatcher couldn't add the listener: ",
+					listener,
+					"since EventKeyList doesn't contains key: ",
+					eventKey
+				);
+
+				return this;
+			}
+			const array: TListenersValue = this.listeners.get(eventKey) || [];
+
+			if (!this.listeners.has(eventKey)) {
+				this.listeners.set(eventKey, array);
+			}
+			array.push({
+				listener,
+				times
+			});
+
+			return this;
+		};
+
+		public checkFilt = (eventKey: TEventKey, target: IEvent) => {
+			for (const item of this.filters) {
+				if (item.rule(eventKey, target)) {
+					item.listener({
+						eventKey,
+						life: Infinity,
+						target
+					});
+				}
+			}
+
+			return this;
+		};
+
+		public checkEventKeyAvailable = (eventKey: TEventKey) => {
+			if (this.eventKeyList.length) {
+				return this.eventKeyList.includes(eventKey);
+			}
+
+			return true;
+		};
+	};
+};
+
+export default mixin(Object);

@@ -1,31 +1,37 @@
 <script src="../build/EventDispatcher.js"></script>
 <script>
+	/* eslint-disable no-undef */
+	/* eslint-disable @typescript-eslint/explicit-member-accessibility */
+	class Car extends EventDispatcher {
+		constructor() {
+			super(["car-a", "bus-1"]);
+		}
 
-    class Car extends EventDispatcher {
-        constructor() {
-            super(['car-a', 'bus-1']);
-        }
-        start = () => {
-            this.dispatchEvent('car-a', {message: 'aaa'});
-            this.dispatchEvent('car-b', {message: 'bbb'});
-            this.dispatchEvent('car-c', {message: 'ccc'});
-            this.dispatchEvent('bus-1', {message: '111'});
-            this.dispatchEvent('bus-2', {message: '222'});
-        };
-    }
+		start = () => {
+			this.dispatchEvent("car-a", { message: "aaa" });
+			this.dispatchEvent("car-b", { message: "bbb" });
+			this.dispatchEvent("car-c", { message: "ccc" });
+			this.dispatchEvent("bus-1", { message: "111" });
+			this.dispatchEvent("bus-2", { message: "222" });
+		};
+	}
 
-    const car = new Car();
+	const car = new Car();
 
-    car.on('car-a', function (event) {
-        console.log("on: ", event.target.message)
-    }).filt((type) => {
-        return type.indexOf('car') > -1;
-    }, (event) => {
-        console.log('filt: ', event.target.message);
-    }).all((event) => {
-        console.log('all: ', event.target.message);
-    });
+	car.on("car-a", function (event) {
+		console.log("on: ", event.target.message);
+	})
+		.filt(
+			(type) => {
+				return type.indexOf("car") > -1;
+			},
+			(event) => {
+				console.log("filt: ", event.target.message);
+			}
+		)
+		.all((event) => {
+			console.log("all: ", event.target.message);
+		});
 
-    car.start();
-
+	car.start();
 </script>

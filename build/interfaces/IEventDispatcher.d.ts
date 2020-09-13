@@ -1,17 +1,22 @@
 /**
  * The object received by the listener
  */
-export declare type TEvent = {
-    eventKey: any;
+export declare type TEventKey = string | number | Symbol;
+export interface IEvent {
+    eventKey: TEventKey;
     target: any;
     life: number;
-};
-export declare type TListener = (event: TEvent) => any;
-export declare type TListenerItem = {
+}
+export declare type TListener = (event: IEvent) => any;
+export interface IListenerItem {
     listener: TListener;
     times: number;
-};
-export declare type TListenersValue = Array<TListenerItem>;
+}
+export interface TFilter {
+    rule: Function;
+    listener: TListener;
+}
+export declare type TListenersValue = Array<IListenerItem>;
 export default interface IEventDispatcher {
     /**
      * listen all events whatever event key
@@ -20,7 +25,7 @@ export default interface IEventDispatcher {
     /**
      * remove all listeners according to event key
      */
-    clearListenersByKey: (eventKey: any) => this;
+    clearListenersByKey: (eventKey: TEventKey) => this;
     /**
      * remove all listeners
      */
@@ -28,7 +33,7 @@ export default interface IEventDispatcher {
     /**
      * dispatch a custom event
      */
-    dispatchEvent: (eventKey: any, target: TEvent) => this;
+    dispatchEvent: (eventKey: TEventKey, target: IEvent) => this;
     /**
      * judge the event key and target arrording to the custom rule
      */
@@ -36,17 +41,17 @@ export default interface IEventDispatcher {
     /**
      * add an event listener
      */
-    on: (eventKey: any, listener: TListener) => this;
+    on: (eventKey: TEventKey, listener: TListener) => this;
     /**
      * delete an event listener
      */
-    off: (eventKey: any, listener: TListener) => this;
+    off: (eventKey: TEventKey, listener: TListener) => this;
     /**
      * add an event listener and the listener only listen to the event one time
      */
-    once: (eventKey: any, listener: TListener) => this;
+    once: (eventKey: TEventKey, listener: TListener) => this;
     /**
      * add an event listener and the listener listen to the event several times
      */
-    times: (eventKey: any, times: number, listener: TListener) => this;
+    times: (eventKey: TEventKey, times: number, listener: TListener) => this;
 }

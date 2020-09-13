@@ -2,7 +2,11 @@
 <script>
 	/* eslint-disable no-undef */
 	/* eslint-disable @typescript-eslint/explicit-member-accessibility */
-	class Car extends EventDispatcher {
+	class Animal {
+		isAnimal = true;
+	}
+
+	class Car extends EventDispatcher.mixin(Animal) {
 		start = () => {
 			this.dispatchEvent("car-a", { message: "aaa" });
 			this.dispatchEvent("car-b", { message: "bbb" });

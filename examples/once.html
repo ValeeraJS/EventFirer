@@ -1,27 +1,27 @@
 <script src="../build/EventDispatcher.js"></script>
 <script>
+	/* eslint-disable no-undef */
+	/* eslint-disable @typescript-eslint/explicit-member-accessibility */
+	class Car extends EventDispatcher {
+		start = () => {
+			this.dispatchEvent("car", { message: "aaa" });
+			this.dispatchEvent("car", { message: "can't listen" });
+			this.dispatchEvent("bus", { message: "bbb" });
+			this.dispatchEvent("bus", { message: "ccc" });
+			this.dispatchEvent("bus", { message: "can't listen" });
+		};
+	}
 
-    class Car extends EventDispatcher {
-        start = () => {
-            this.dispatchEvent('car', {message: 'aaa'});
-            this.dispatchEvent('car', {message: 'can\'t listen'});
-            this.dispatchEvent('bus', {message: 'bbb'});
-            this.dispatchEvent('bus', {message: 'ccc'});
-            this.dispatchEvent('bus', {message: 'can\'t listen'});
-        };
-    }
+	const car = new Car();
 
-    const car = new Car();
+	car.once("car", (event) => {
+		// listen the event only one time
+		// car.once() is as same as car.times('car', 1, () => {...})
+		console.log("once: ", event.target.message);
+	}).times("bus", 2, (event) => {
+		// this can set listen the event serval times.
+		console.log("times: ", event.target.message);
+	});
 
-    car.once('car', (event) => {
-        // listen the event only one time
-        // car.once() is as same as car.times('car', 1, () => {...})
-        console.log("once: ", event.target.message)
-    }).times('bus', 2, (event) => {
-        // this can set listen the event serval times.
-        console.log("times: ", event.target.message)
-    });
-
-    car.start();
-
+	car.start();
 </script>

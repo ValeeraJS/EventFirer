@@ -1,25 +1,25 @@
 <script src="../build/EventDispatcher.js"></script>
 <script>
+	/* eslint-disable no-undef */
+	/* eslint-disable @typescript-eslint/explicit-member-accessibility */
+	class Cat extends EventDispatcher {
+		born = () => {
+			this.intervalId = setInterval(() => {
+				console.log("Listen:");
+				this.dispatchEvent("miao", { message: "miao miao miao" });
+			}, 1000);
+		};
+	}
 
-    class Cat extends EventDispatcher {
-        born = () => {
-            this.intervalId = setInterval(() => {
-                console.log('Listen:');
-                this.dispatchEvent('miao', { message: 'miao miao miao' });
-            }, 1000);
-        };
-    }
+	const cat = new Cat();
 
-    const cat = new Cat();
+	cat.times("miao", 3, (event) => {
+		console.log("times: ", event.target.message);
+		if (event.life === 0) {
+			console.log("the cat is dead.");
+			clearInterval(cat.intervalId);
+		}
+	});
 
-    cat.times('miao', 3, (event) => {
-        console.log("times: ", event.target.message);
-        if (event.life === 0) {
-            console.log('the cat is dead.');
-            clearInterval(cat.intervalId);
-        }
-    });
-
-    cat.born();
-
+	cat.born();
 </script>
