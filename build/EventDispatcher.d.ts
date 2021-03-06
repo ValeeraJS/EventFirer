@@ -14,8 +14,8 @@ export declare const mixin: <TBase extends Constructor<{}>>(Base?: TBase, eventK
         all: (listener: TListener) => any;
         clearListenersByKey: (eventKey: TEventKey) => any;
         clearAllListeners: () => any;
-        dispatchEvent: (eventKey: TEventKey, target: IEvent) => any;
         filt: (rule: Function, listener: TListener) => any;
+        fire: (eventKey: TEventKey, target: IEvent) => any;
         off: (eventKey: TEventKey, listener: TListener) => any;
         on: (eventKey: TEventKey, listener: TListener) => any;
         once: (eventKey: TEventKey, listener: TListener) => any;
@@ -39,8 +39,8 @@ declare const _default: {
         all: (listener: TListener) => any;
         clearListenersByKey: (eventKey: TEventKey) => any;
         clearAllListeners: () => any;
-        dispatchEvent: (eventKey: TEventKey, target: IEvent) => any;
         filt: (rule: Function, listener: TListener) => any;
+        fire: (eventKey: TEventKey, target: IEvent) => any;
         off: (eventKey: TEventKey, listener: TListener) => any;
         on: (eventKey: TEventKey, listener: TListener) => any;
         once: (eventKey: TEventKey, listener: TListener) => any;
@@ -62,8 +62,8 @@ declare const _default: {
             all: (listener: TListener) => any;
             clearListenersByKey: (eventKey: TEventKey) => any;
             clearAllListeners: () => any;
-            dispatchEvent: (eventKey: TEventKey, target: IEvent) => any;
             filt: (rule: Function, listener: TListener) => any;
+            fire: (eventKey: TEventKey, target: IEvent) => any;
             off: (eventKey: TEventKey, listener: TListener) => any;
             on: (eventKey: TEventKey, listener: TListener) => any;
             once: (eventKey: TEventKey, listener: TListener) => any;

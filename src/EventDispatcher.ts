@@ -50,7 +50,16 @@ export const mixin = <TBase extends Constructor>(
 			return this;
 		};
 
-		public dispatchEvent = (eventKey: TEventKey, target: IEvent) => {
+		public filt = (rule: Function, listener: TListener) => {
+			this.filters.push({
+				listener,
+				rule
+			});
+
+			return this;
+		};
+
+		public fire = (eventKey: TEventKey, target: IEvent) => {
 			if (!this.checkEventKeyAvailable(eventKey)) {
 				console.error(
 					"EventDispatcher couldn't dispatch the event since EventKeyList doesn't contains key: ",
@@ -77,15 +86,6 @@ export const mixin = <TBase extends Constructor>(
 			}
 
 			return this.checkFilt(eventKey, target);
-		};
-
-		public filt = (rule: Function, listener: TListener) => {
-			this.filters.push({
-				listener,
-				rule
-			});
-
-			return this;
 		};
 
 		public off = (eventKey: TEventKey, listener: TListener) => {

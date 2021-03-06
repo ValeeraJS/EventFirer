@@ -1,14 +1,14 @@
-<script src="../build/EventDispatcher.js"></script>
+<script src="../build/EventDispatcher.min.js"></script>
 <script>
 	/* eslint-disable no-undef */
 	/* eslint-disable @typescript-eslint/explicit-member-accessibility */
 	class Car extends EventDispatcher {
 		start = () => {
-			this.dispatchEvent("car-a", { message: "aaa" });
-			this.dispatchEvent("car-b", { message: "bbb" });
-			this.dispatchEvent("car-c", { message: "ccc" });
-			this.dispatchEvent("bus-1", { message: "111" });
-			this.dispatchEvent("bus-2", { message: "222" });
+			this.fire("car-a", { message: "aaa" });
+			this.fire("car-b", { message: "bbb" });
+			this.fire("car-c", { message: "ccc" });
+			this.fire("bus-1", { message: "111" });
+			this.fire("bus-2", { message: "222" });
 		};
 	}
 

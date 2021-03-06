@@ -4,11 +4,11 @@
 	/* eslint-disable @typescript-eslint/explicit-member-accessibility */
 	class Car extends EventDispatcher {
 		start = () => {
-			this.dispatchEvent("car", { message: "aaa" });
-			this.dispatchEvent("car", { message: "can't listen" });
-			this.dispatchEvent("bus", { message: "bbb" });
-			this.dispatchEvent("bus", { message: "ccc" });
-			this.dispatchEvent("bus", { message: "can't listen" });
+			this.fire("car", { message: "aaa" });
+			this.fire("car", { message: "can't listen" });
+			this.fire("bus", { message: "bbb" });
+			this.fire("bus", { message: "ccc" });
+			this.fire("bus", { message: "can't listen" });
 		};
 	}
 

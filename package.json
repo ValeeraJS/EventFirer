@@ -1,6 +1,6 @@
 {
 	"name": "@valeera/eventdispatcher",
-	"version": "1.1.0",
+	"version": "2.0.0",
 	"description": "Event dispatcher fit for most framework.",
 	"main": "build/EventDispatcher.js",
 	"repository": "ValeeraJS/EventDispatcher",
@@ -23,7 +23,7 @@
 		"build": "rollup -c scripts/rollup.config.js",
 		"build-legacy": "rollup -c scripts/rollup.config.legacy.js",
 		"build-closure": "google-closure-compiler --compilation_level=ADVANCED_OPTIMIZATIONS --warning_level=VERBOSE --jscomp_off=globalThis --jscomp_off=checkTypes --externs scripts/externs.js --language_in=ECMASCRIPT_NEXT --language_out=ECMASCRIPT_NEXT --js build/EventDispatcher.js --js_output_file build/EventDispatcher.min.js",
-		"build-closure-legacy": "google-closure-compiler --compilation_level=ADVANCED_OPTIMIZATIONS --warning_level=VERBOSE --jscomp_off=globalThis --jscomp_off=checkTypes --externs scripts/externs.js --language_in=ECMASCRIPT5 --js build/EventDispatcher.legacy.js --js_output_file build/EventDispatcher.legacy.min.js",
+		"build-closure-legacy": "google-closure-compiler --compilation_level=ADVANCED_OPTIMIZATIONS --warning_level=VERBOSE --jscomp_off=globalThis --jscomp_off=checkTypes --externs scripts/externs.js --language_in=ECMASCRIPT5 --language_out=ECMASCRIPT5 --js build/EventDispatcher.legacy.js --js_output_file build/EventDispatcher.legacy.min.js",
 		"build-all": "npm run build && npm run build-legacy && npm run build-closure && npm run build-closure-legacy",
 		"tsc": "tsc",
 		"start": "npm run dev",

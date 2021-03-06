@@ -11,7 +11,7 @@
 				const player2Score = Math.random();
 
 				console.log(player1Score, player2Score);
-				this.dispatchEvent(player1Score > player2Score ? "1" : "2", {
+				this.fire(player1Score > player2Score ? "1" : "2", {
 					player1Score,
 					player2Score
 				});

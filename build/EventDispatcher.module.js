@@ -30,7 +30,14 @@ const mixin = (Base = Object, eventKeyList = []) => {
                     }
                     return this;
                 };
-                this.dispatchEvent = (eventKey, target) => {
+                this.filt = (rule, listener) => {
+                    this.filters.push({
+                        listener,
+                        rule
+                    });
+                    return this;
+                };
+                this.fire = (eventKey, target) => {
                     if (!this.checkEventKeyAvailable(eventKey)) {
                         console.error("EventDispatcher couldn't dispatch the event since EventKeyList doesn't contains key: ", eventKey);
                         return this;
@@ -51,13 +58,6 @@ const mixin = (Base = Object, eventKeyList = []) => {
                         }
                     }
                     return this.checkFilt(eventKey, target);
-                };
-                this.filt = (rule, listener) => {
-                    this.filters.push({
-                        listener,
-                        rule
-                    });
-                    return this;
                 };
                 this.off = (eventKey, listener) => {
                     const array = this.listeners.get(eventKey);

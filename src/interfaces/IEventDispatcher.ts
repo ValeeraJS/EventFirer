@@ -6,7 +6,7 @@ export type TEventKey = string | number | Symbol;
 export interface IEvent {
 	eventKey: TEventKey;
 	target: any;
-	life: number;
+	life?: number;
 }
 
 export type TListener = (event: IEvent) => any;
@@ -40,14 +40,14 @@ export default interface IEventDispatcher {
 	clearAllListeners: () => void;
 
 	/**
-	 * dispatch a custom event
-	 */
-	dispatchEvent: (eventKey: TEventKey, target: IEvent) => this;
-
-	/**
 	 * judge the event key and target arrording to the custom rule
 	 */
 	filt: (rule: Function, listener: TListener) => this;
+
+	/**
+	 * fire a custom event
+	 */
+	fire: (eventKey: TEventKey, target: IEvent) => this;
 
 	/**
 	 * add an event listener

@@ -17,11 +17,13 @@ PERFORMANCE OF THIS SOFTWARE.
 var extendStatics = function(d, b) {
     extendStatics = Object.setPrototypeOf ||
         ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+        function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
     return extendStatics(d, b);
 };
 
 function __extends(d, b) {
+    if (typeof b !== "function" && b !== null)
+        throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
     extendStatics(d, b);
     function __() { this.constructor = d; }
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
@@ -85,7 +87,14 @@ var mixin = function (Base, eventKeyList) {
                     }
                     return _this;
                 };
-                _this.dispatchEvent = function (eventKey, target) {
+                _this.filt = function (rule, listener) {
+                    _this.filters.push({
+                        listener: listener,
+                        rule: rule
+                    });
+                    return _this;
+                };
+                _this.fire = function (eventKey, target) {
                     if (!_this.checkEventKeyAvailable(eventKey)) {
                         console.error("EventDispatcher couldn't dispatch the event since EventKeyList doesn't contains key: ", eventKey);
                         return _this;
@@ -106,13 +115,6 @@ var mixin = function (Base, eventKeyList) {
                         }
                     }
                     return _this.checkFilt(eventKey, target);
-                };
-                _this.filt = function (rule, listener) {
-                    _this.filters.push({
-                        listener: listener,
-                        rule: rule
-                    });
-                    return _this;
                 };
                 _this.off = function (eventKey, listener) {
                     var array = _this.listeners.get(eventKey);
