@@ -1,5 +1,4 @@
 import IEventDispatcher, {
-	IEvent,
 	IListenerItem,
 	TEventKey,
 	TFilter,
@@ -9,28 +8,24 @@ import IEventDispatcher, {
 
 type Constructor<T = {}> = new (...a: any[]) => T;
 
-// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 export const mixin = <TBase extends Constructor>(
 	Base: TBase = Object as any,
 	eventKeyList: TEventKey[] = []
-) => {
-	return class EventDispatcher extends Base implements IEventDispatcher {
+): Constructor => {
+	return class EventDispatcher extends Base implements IEventDispatcher<any> {
 		public static mixin = mixin;
-		// eslint-disable-next-line @typescript-eslint/explicit-member-accessibility
-		eventKeyList: TEventKey[] = eventKeyList;
+		public eventKeyList: TEventKey[] = eventKeyList;
 		/**
 		 * store all the filters
 		 */
-		// eslint-disable-next-line @typescript-eslint/explicit-member-accessibility
-		filters: TFilter[] = [];
+		public filters: TFilter<any>[] = [];
 
 		/**
 		 * store all the listeners by key
 		 */
-		// eslint-disable-next-line @typescript-eslint/explicit-member-accessibility
-		listeners: Map<TEventKey, TListenersValue> = new Map();
+		public listeners: Map<TEventKey, TListenersValue<any>> = new Map();
 
-		public all = (listener: TListener) => {
+		public all = (listener: TListener<any>) => {
 			return this.filt(() => true, listener);
 		};
 
@@ -50,7 +45,7 @@ export const mixin = <TBase extends Constructor>(
 			return this;
 		};
 
-		public filt = (rule: Function, listener: TListener) => {
+		public filt = (rule: Function, listener: TListener<any>) => {
 			this.filters.push({
 				listener,
 				rule
@@ -59,7 +54,7 @@ export const mixin = <TBase extends Constructor>(
 			return this;
 		};
 
-		public fire = (eventKey: TEventKey, target: IEvent) => {
+		public fire = (eventKey: TEventKey, target: any) => {
 			if (!this.checkEventKeyAvailable(eventKey)) {
 				console.error(
 					"EventDispatcher couldn't dispatch the event since EventKeyList doesn't contains key: ",
@@ -68,9 +63,9 @@ export const mixin = <TBase extends Constructor>(
 
 				return this;
 			}
-			const array: TListenersValue = this.listeners.get(eventKey) || [];
+			const array: TListenersValue<any> = this.listeners.get(eventKey) || [];
 			let len = array.length;
-			let item: IListenerItem;
+			let item: IListenerItem<any>;
 
 			for (let i = 0; i < len; i++) {
 				item = array[i];
@@ -88,8 +83,8 @@ export const mixin = <TBase extends Constructor>(
 			return this.checkFilt(eventKey, target);
 		};
 
-		public off = (eventKey: TEventKey, listener: TListener) => {
-			const array: TListenersValue | undefined = this.listeners.get(eventKey);
+		public off = (eventKey: TEventKey, listener: TListener<any>) => {
+			const array: TListenersValue<any> | undefined = this.listeners.get(eventKey);
 
 			if (!array) {
 				return this;
@@ -106,15 +101,15 @@ export const mixin = <TBase extends Constructor>(
 			return this;
 		};
 
-		public on = (eventKey: TEventKey, listener: TListener) => {
+		public on = (eventKey: TEventKey, listener: TListener<any>) => {
 			return this.times(eventKey, Infinity, listener);
 		};
 
-		public once = (eventKey: TEventKey, listener: TListener) => {
+		public once = (eventKey: TEventKey, listener: TListener<any>) => {
 			return this.times(eventKey, 1, listener);
 		};
 
-		public times = (eventKey: TEventKey, times: number, listener: TListener) => {
+		public times = (eventKey: TEventKey, times: number, listener: TListener<any>) => {
 			if (!this.checkEventKeyAvailable(eventKey)) {
 				console.error(
 					"EventDispatcher couldn't add the listener: ",
@@ -125,7 +120,7 @@ export const mixin = <TBase extends Constructor>(
 
 				return this;
 			}
-			const array: TListenersValue = this.listeners.get(eventKey) || [];
+			const array: TListenersValue<any> = this.listeners.get(eventKey) || [];
 
 			if (!this.listeners.has(eventKey)) {
 				this.listeners.set(eventKey, array);
@@ -138,7 +133,7 @@ export const mixin = <TBase extends Constructor>(
 			return this;
 		};
 
-		public checkFilt = (eventKey: TEventKey, target: IEvent) => {
+		public checkFilt = (eventKey: TEventKey, target: any) => {
 			for (const item of this.filters) {
 				if (item.rule(eventKey, target)) {
 					item.listener({

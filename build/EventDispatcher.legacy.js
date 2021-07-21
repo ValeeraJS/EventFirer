@@ -47,7 +47,6 @@
 	    throw new TypeError(s ? "Object is not iterable." : "Symbol.iterator is not defined.");
 	}
 
-	// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 	var mixin = function (Base, eventKeyList) {
 	    var _a;
 	    if (Base === void 0) { Base = Object; }
@@ -56,17 +55,14 @@
 	            __extends(EventDispatcher, _super);
 	            function EventDispatcher() {
 	                var _this = _super !== null && _super.apply(this, arguments) || this;
-	                // eslint-disable-next-line @typescript-eslint/explicit-member-accessibility
 	                _this.eventKeyList = eventKeyList;
 	                /**
 	                 * store all the filters
 	                 */
-	                // eslint-disable-next-line @typescript-eslint/explicit-member-accessibility
 	                _this.filters = [];
 	                /**
 	                 * store all the listeners by key
 	                 */
-	                // eslint-disable-next-line @typescript-eslint/explicit-member-accessibility
 	                _this.listeners = new Map();
 	                _this.all = function (listener) {
 	                    return _this.filt(function () { return true; }, listener);

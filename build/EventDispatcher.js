@@ -4,23 +4,19 @@
 	(global = typeof globalThis !== 'undefined' ? globalThis : global || self, global.EventDispatcher = factory());
 }(this, (function () { 'use strict';
 
-	// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 	const mixin = (Base = Object, eventKeyList = []) => {
 	    var _a;
 	    return _a = class EventDispatcher extends Base {
 	            constructor() {
 	                super(...arguments);
-	                // eslint-disable-next-line @typescript-eslint/explicit-member-accessibility
 	                this.eventKeyList = eventKeyList;
 	                /**
 	                 * store all the filters
 	                 */
-	                // eslint-disable-next-line @typescript-eslint/explicit-member-accessibility
 	                this.filters = [];
 	                /**
 	                 * store all the listeners by key
 	                 */
-	                // eslint-disable-next-line @typescript-eslint/explicit-member-accessibility
 	                this.listeners = new Map();
 	                this.all = (listener) => {
 	                    return this.filt(() => true, listener);
