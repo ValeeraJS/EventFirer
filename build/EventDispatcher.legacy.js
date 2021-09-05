@@ -47,6 +47,7 @@
 	    throw new TypeError(s ? "Object is not iterable." : "Symbol.iterator is not defined.");
 	}
 
+	// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 	var mixin = function (Base, eventKeyList) {
 	    var _a;
 	    if (Base === void 0) { Base = Object; }

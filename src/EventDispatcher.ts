@@ -8,10 +8,11 @@ import IEventDispatcher, {
 
 type Constructor<T = {}> = new (...a: any[]) => T;
 
+// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 export const mixin = <TBase extends Constructor>(
 	Base: TBase = Object as any,
 	eventKeyList: TEventKey[] = []
-): Constructor => {
+) => {
 	return class EventDispatcher extends Base implements IEventDispatcher<any> {
 		public static mixin = mixin;
 		public eventKeyList: TEventKey[] = eventKeyList;

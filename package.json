@@ -1,6 +1,6 @@
 {
 	"name": "@valeera/eventdispatcher",
-	"version": "2.1.1",
+	"version": "2.1.2",
 	"description": "Event dispatcher fit for most framework.",
 	"main": "build/EventDispatcher.js",
 	"repository": "ValeeraJS/EventDispatcher",

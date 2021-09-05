@@ -4,6 +4,7 @@
 	(global = typeof globalThis !== 'undefined' ? globalThis : global || self, global.EventDispatcher = factory());
 }(this, (function () { 'use strict';
 
+	// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 	const mixin = (Base = Object, eventKeyList = []) => {
 	    var _a;
 	    return _a = class EventDispatcher extends Base {
