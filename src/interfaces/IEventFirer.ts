@@ -3,7 +3,8 @@
  */
 export type TEventKey = string | number | Symbol;
 
-export type TListener<T> = (event: T) => any;
+export type TListener<T> = (event?: T) => any;
+export type TListenerFilter<T> = (event?: T, eventKey?: TEventKey) => any;
 
 export interface IListenerItem<T> {
 	listener: TListener<T>;
@@ -12,12 +13,12 @@ export interface IListenerItem<T> {
 
 export interface TFilter<T> {
 	rule: Function;
-	listener: TListener<T>;
+	listener: TListenerFilter<T>;
 }
 
 export type TListenersValue<T> = Array<IListenerItem<T>>;
 
-export default interface IEventDispatcher<T> {
+export default interface IEventFirer<T> {
 	/**
 	 * listen all events whatever event key
 	 */

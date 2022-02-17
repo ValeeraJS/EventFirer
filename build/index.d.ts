@@ -1,2 +1,2 @@
-import EventDispatcher from "./EventDispatcher";
+import EventDispatcher from "./EventFirer";
 export default EventDispatcher;

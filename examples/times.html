@@ -14,11 +14,7 @@
 	const cat = new Cat();
 
 	cat.times("miao", 3, (event) => {
-		console.log("times: ", event.target.message);
-		if (event.life === 0) {
-			console.log("the cat is dead.");
-			clearInterval(cat.intervalId);
-		}
+		console.log("times: ", event);
 	});
 
 	cat.born();

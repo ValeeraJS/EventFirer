@@ -17,10 +17,10 @@
 	car.once("car", (event) => {
 		// listen the event only one time
 		// car.once() is as same as car.times('car', 1, () => {...})
-		console.log("once: ", event.target.message);
+		console.log("once: ", event);
 	}).times("bus", 2, (event) => {
 		// this can set listen the event serval times.
-		console.log("times: ", event.target.message);
+		console.log("times: ", event);
 	});
 
 	car.start();
