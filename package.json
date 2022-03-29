@@ -1,12 +1,12 @@
 {
 	"name": "@valeera/eventdispatcher",
-	"version": "2.2.2",
+	"version": "2.2.3",
 	"description": "Event dispatcher fit for most framework.",
 	"main": "build/EventDispatcher.js",
 	"repository": "ValeeraJS/EventDispatcher",
 	"jsnext:main": "build/EventDispatcher.module.js",
 	"module": "build/EventDispatcher.module.js",
-	"types": "build/EventDispatcher.d.ts",
+	"types": "build/index.d.ts",
 	"files": [
 		"build",
 		"LICENSE",
