@@ -185,4 +185,4 @@ var mixin = function (Base, eventKeyList) {
 };
 var EventDispatcher = mixin(Object);
 
-export { EventDispatcher as default };
+export { EventDispatcher as default, mixin };
