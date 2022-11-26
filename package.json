@@ -3,7 +3,7 @@
 	"version": "2.2.4",
 	"description": "Event dispatcher fit for most framework.",
 	"main": "build/EventFirer.js",
-	"repository": "ValeeraJS/EventDispatcher",
+	"repository": "ValeeraJS/EventFirer",
 	"jsnext:main": "build/EventFirer.module.js",
 	"module": "build/EventFirer.module.js",
 	"types": "build/index.d.ts",
