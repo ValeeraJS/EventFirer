@@ -3,26 +3,26 @@
  */
 export type TEventKey = string | number | Symbol;
 
-export type TListener<T> = (event?: T) => any;
-export type TListenerFilter<T> = (event?: T, eventKey?: TEventKey) => any;
+export type TListener = (event?: any) => any;
+export type TListenerFilter = (event?: any, eventKey?: TEventKey) => any;
 
-export interface IListenerItem<T> {
-	listener: TListener<T>;
+export interface IListenerItem {
+	listener: TListener;
 	times: number;
 }
 
-export interface TFilter<T> {
+export interface TFilter {
 	rule: Function;
-	listener: TListenerFilter<T>;
+	listener: TListenerFilter;
 }
 
-export type TListenersValue<T> = Array<IListenerItem<T>>;
+export type TListenersValue = Array<IListenerItem>;
 
-export default interface IEventFirer<T> {
+export default interface IEventFirer {
 	/**
 	 * listen all events whatever event key
 	 */
-	all: (listener: TListener<T>) => this;
+	all: (listener: TListener) => this;
 
 	/**
 	 * remove all listeners according to event key
@@ -37,30 +37,30 @@ export default interface IEventFirer<T> {
 	/**
 	 * judge the event key and target arrording to the custom rule
 	 */
-	filt: (rule: Function, listener: TListener<T>) => this;
+	filt: (rule: Function, listener: TListener) => this;
 
 	/**
 	 * fire a custom event
 	 */
-	fire: (eventKey: TEventKey, target: T) => this;
+	fire: (eventKey: TEventKey | TEventKey[], event?: any) => this;
 
 	/**
 	 * add an event listener
 	 */
-	on: (eventKey: TEventKey, listener: TListener<T>) => this;
+	on: (eventKey: TEventKey, listener: TListener) => this;
 
 	/**
 	 * delete an event listener
 	 */
-	off: (eventKey: TEventKey, listener: TListener<T>) => this;
+	off: (eventKey: TEventKey, listener: TListener) => this;
 
 	/**
 	 * add an event listener and the listener only listen to the event one time
 	 */
-	once: (eventKey: TEventKey, listener: TListener<T>) => this;
+	once: (eventKey: TEventKey, listener: TListener) => this;
 
 	/**
 	 * add an event listener and the listener listen to the event several times
 	 */
-	times: (eventKey: TEventKey, times: number, listener: TListener<T>) => this;
+	times: (eventKey: TEventKey, times: number, listener: TListener) => this;
 }

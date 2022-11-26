@@ -1,77 +1,64 @@
+/// <reference types="chai" />
 import { TEventKey, TFilter, TListener, TListenersValue } from "./interfaces/IEventFirer";
-declare type Constructor<T = {}> = new (...a: any[]) => T;
-export declare const mixin: <TBase extends Constructor<{}>>(Base?: TBase, eventKeyList?: TEventKey[]) => {
+type Constructor<T = Object> = new (...a: any[]) => T;
+export declare const mixin: (Base?: Constructor, eventKeyList?: TEventKey[]) => {
     new (...a: any[]): {
+        "__#5@#isFire": boolean;
+        "__#5@#fireIndex": number;
+        "__#5@#offCount": Map<TEventKey, number>;
         eventKeyList: TEventKey[];
-        /**
-         * store all the filters
-         */
-        filters: TFilter<any>[];
-        /**
-         * store all the listeners by key
-         */
-        listeners: Map<TEventKey, TListenersValue<any>>;
-        all(listener: TListener<any>): any;
+        filters: TFilter[];
+        listeners: Map<TEventKey, TListenersValue>;
+        all(listener: TListener): any;
         clearListenersByKey(eventKey: TEventKey): any;
         clearAllListeners(): any;
-        filt(rule: Function, listener: TListener<any>): any;
-        fire(eventKey: TEventKey, target: any): any;
-        off(eventKey: TEventKey, listener: TListener<any>): any;
-        on(eventKey: TEventKey | TEventKey[], listener: TListener<any>): any;
-        once(eventKey: TEventKey, listener: TListener<any>): any;
-        times(eventKey: TEventKey, times: number, listener: TListener<any>): any;
+        filt(rule: Function, listener: TListener): any;
+        fire(eventKey: TEventKey | TEventKey[], target?: any): any;
+        off(eventKey: TEventKey, listener: TListener): any;
+        on(eventKey: TEventKey | TEventKey[], listener: TListener): any;
+        once(eventKey: TEventKey, listener: TListener): any;
+        times(eventKey: TEventKey, times: number, listener: TListener): any;
         checkFilt(eventKey: TEventKey, target: any): any;
         checkEventKeyAvailable(eventKey: TEventKey): boolean;
+        constructor: Function;
+        toString(): string;
+        toLocaleString(): string;
+        valueOf(): Object;
+        hasOwnProperty(v: PropertyKey): boolean;
+        isPrototypeOf(v: Object): boolean;
+        propertyIsEnumerable(v: PropertyKey): boolean;
+        should: Chai.Assertion;
     };
     mixin: any;
-} & TBase;
+};
 declare const _default: {
     new (...a: any[]): {
+        "__#5@#isFire": boolean;
+        "__#5@#fireIndex": number;
+        "__#5@#offCount": Map<TEventKey, number>;
         eventKeyList: TEventKey[];
-        /**
-         * store all the filters
-         */
-        filters: TFilter<any>[];
-        /**
-         * store all the listeners by key
-         */
-        listeners: Map<TEventKey, TListenersValue<any>>;
-        all(listener: TListener<any>): any;
+        filters: TFilter[];
+        listeners: Map<TEventKey, TListenersValue>;
+        all(listener: TListener): any;
         clearListenersByKey(eventKey: TEventKey): any;
         clearAllListeners(): any;
-        filt(rule: Function, listener: TListener<any>): any;
-        fire(eventKey: TEventKey, target: any): any;
-        off(eventKey: TEventKey, listener: TListener<any>): any;
-        on(eventKey: TEventKey | TEventKey[], listener: TListener<any>): any;
-        once(eventKey: TEventKey, listener: TListener<any>): any;
-        times(eventKey: TEventKey, times: number, listener: TListener<any>): any;
+        filt(rule: Function, listener: TListener): any;
+        fire(eventKey: TEventKey | TEventKey[], target?: any): any;
+        off(eventKey: TEventKey, listener: TListener): any;
+        on(eventKey: TEventKey | TEventKey[], listener: TListener): any;
+        once(eventKey: TEventKey, listener: TListener): any;
+        times(eventKey: TEventKey, times: number, listener: TListener): any;
         checkFilt(eventKey: TEventKey, target: any): any;
         checkEventKeyAvailable(eventKey: TEventKey): boolean;
+        constructor: Function;
+        toString(): string;
+        toLocaleString(): string;
+        valueOf(): Object;
+        hasOwnProperty(v: PropertyKey): boolean;
+        isPrototypeOf(v: Object): boolean;
+        propertyIsEnumerable(v: PropertyKey): boolean;
+        should: Chai.Assertion;
     };
-    mixin: <TBase extends Constructor<{}>>(Base?: TBase, eventKeyList?: TEventKey[]) => {
-        new (...a: any[]): {
-            eventKeyList: TEventKey[];
-            /**
-             * store all the filters
-             */
-            filters: TFilter<any>[];
-            /**
-             * store all the listeners by key
-             */
-            listeners: Map<TEventKey, TListenersValue<any>>;
-            all(listener: TListener<any>): any;
-            clearListenersByKey(eventKey: TEventKey): any;
-            clearAllListeners(): any;
-            filt(rule: Function, listener: TListener<any>): any;
-            fire(eventKey: TEventKey, target: any): any;
-            off(eventKey: TEventKey, listener: TListener<any>): any;
-            on(eventKey: TEventKey | TEventKey[], listener: TListener<any>): any;
-            once(eventKey: TEventKey, listener: TListener<any>): any;
-            times(eventKey: TEventKey, times: number, listener: TListener<any>): any;
-            checkFilt(eventKey: TEventKey, target: any): any;
-            checkEventKeyAvailable(eventKey: TEventKey): boolean;
-        };
-        mixin: any;
-    } & TBase;
-} & ObjectConstructor;
+    mixin: (Base?: Constructor<Object>, eventKeyList?: TEventKey[]) => any;
+};
 export default _default;

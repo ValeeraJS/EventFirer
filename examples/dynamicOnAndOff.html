@@ -1,0 +1,31 @@
+<script src="../build/EventFirer.js"></script>
+<script>
+	/* eslint-disable no-undef */
+	/* eslint-disable @typescript-eslint/explicit-member-accessibility */
+	class Test extends EventFirer {
+		start = () => {
+			this.fire("aaa", { message: "aaa" });
+		};
+	}
+
+	const car = new Test();
+
+	const on1 = () => {
+		console.log(1);
+	};
+
+	const on2 = () => {
+		console.log(2, "remove 1");
+		car.off("aaa", on2);
+	};
+
+	const on3 = () => {
+		console.log(3);
+	};
+
+	car.on("aaa", on1);
+	car.on("aaa", on2);
+	car.on("aaa", on3);
+
+	car.start();
+</script>

@@ -2,14 +2,11 @@
 const mixin = (Base = Object, eventKeyList = []) => {
     return class EventFirer extends Base {
         static mixin = mixin;
+        #isFire = false;
+        #fireIndex = -1;
+        #offCount = new Map();
         eventKeyList = eventKeyList;
-        /**
-         * store all the filters
-         */
         filters = [];
-        /**
-         * store all the listeners by key
-         */
         listeners = new Map();
         all(listener) {
             return this.filt(() => true, listener);
@@ -33,23 +30,40 @@ const mixin = (Base = Object, eventKeyList = []) => {
             return this;
         }
         fire(eventKey, target) {
+            if (eventKey instanceof Array) {
+                for (let i = 0, len = eventKey.length; i < len; i++) {
+                    this.fire(eventKey[i], target);
+                }
+                return this;
+            }
+            this.#isFire = true;
             if (!this.checkEventKeyAvailable(eventKey)) {
                 console.error("EventDispatcher couldn't dispatch the event since EventKeyList doesn't contains key: ", eventKey);
                 return this;
             }
             const array = this.listeners.get(eventKey) || [];
-            let len = array.length;
+            // let len = array.length;
             let item;
-            for (let i = 0; i < len; i++) {
+            for (let i = 0; i < array.length; i++) {
+                this.#fireIndex = i;
                 item = array[i];
                 item.listener(target);
                 item.times--;
                 if (item.times <= 0) {
                     array.splice(i--, 1);
-                    --len;
+                }
+                const count = this.#offCount.get(eventKey);
+                if (count) {
+                    // 如果在当前事件触发时，监听器依次触发，已触发的被移除
+                    i -= count;
+                    this.#offCount.clear();
                 }
             }
-            return this.checkFilt(eventKey, target);
+            this.checkFilt(eventKey, target);
+            this.#fireIndex = -1;
+            this.#offCount.clear();
+            this.#isFire = false;
+            return this;
         }
         off(eventKey, listener) {
             const array = this.listeners.get(eventKey);
@@ -60,6 +74,10 @@ const mixin = (Base = Object, eventKeyList = []) => {
             for (let i = 0; i < len; i++) {
                 if (array[i].listener === listener) {
                     array.splice(i, 1);
+                    if (this.#isFire && this.#fireIndex >= i) {
+                        const v = this.#offCount.get(eventKey) ?? 0;
+                        this.#offCount.set(eventKey, v + 1);
+                    }
                     break;
                 }
             }
@@ -110,4 +128,4 @@ const mixin = (Base = Object, eventKeyList = []) => {
 };
 var EventDispatcher = mixin(Object);
 
-export { EventDispatcher as default, mixin };
+export { EventDispatcher as default };

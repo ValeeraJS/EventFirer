@@ -1,10 +1,11 @@
-import EventDispatcher from "../src/EventDispatcher";
+/* eslint-disable max-nested-callbacks */
+import EventFirer from "../src/EventFirer";
 import { expect } from "chai";
 
-let tmpEventOnTest, tmpEventAll, tmpEventfilt;
-const dispatcher = new EventDispatcher();
+let tmpEventOnTest: any, tmpEventAll: any, tmpEventfilt: any;
+const dispatcher = new EventFirer();
 
-function onTest(event) {
+function onTest(event: any) {
 	tmpEventOnTest = event;
 	it('should be called "on": ', function () {
 		tmpEventOnTest.should.have.property("times", Infinity);
@@ -13,7 +14,7 @@ function onTest(event) {
 	});
 }
 
-function onceTest2(event) {
+function onceTest2(event: any) {
 	tmpEventOnTest = event;
 	it('should be called "on": ', function () {
 		tmpEventOnTest.should.have.property("times", Infinity);
@@ -22,7 +23,7 @@ function onceTest2(event) {
 	});
 }
 
-function onceTest2B(event) {
+function onceTest2B(event: any) {
 	tmpEventOnTest = event;
 	it('should be called "on": ', function () {
 		tmpEventOnTest.should.have.property("times", Infinity);
@@ -31,7 +32,7 @@ function onceTest2B(event) {
 	});
 }
 
-function onceTest2C(event) {
+function onceTest2C(event: any) {
 	tmpEventOnTest = event;
 	it('should be called "on": ', function () {
 		tmpEventOnTest.should.have.property("times", Infinity);
@@ -47,7 +48,7 @@ describe("normal event listener", function () {
 
 	it('test chain "all": ', function () {
 		expect(
-			dispatcher.all(function (event) {
+			dispatcher.all(function (event: any) {
 				tmpEventAll = event;
 				it('should be called "all": ', function () {
 					tmpEventAll.should.have.property("times", Infinity);
@@ -61,7 +62,7 @@ describe("normal event listener", function () {
 	it('test chain "filt": ', function () {
 		expect(
 			dispatcher.filt(
-				(eventKey, event) => {
+				(eventKey: any, event: any) => {
 					it("should be called: ", function () {
 						eventKey.should.be.equal("test");
 						event.should.have.property("target", 123);
@@ -69,7 +70,7 @@ describe("normal event listener", function () {
 
 					return true;
 				},
-				function (event) {
+				function (event: any) {
 					tmpEventfilt = event;
 					it('should be called "filt": ', function () {
 						tmpEventfilt.should.have.property("times", Infinity);
@@ -84,7 +85,7 @@ describe("normal event listener", function () {
 	it('test chain "filt": ', function () {
 		expect(
 			dispatcher.filt(
-				(eventKey, event) => {
+				(eventKey: any, event: any) => {
 					it("should be called: ", function () {
 						eventKey.should.be.equal("test");
 						event.should.have.property("target", 123);
@@ -92,7 +93,7 @@ describe("normal event listener", function () {
 
 					return false;
 				},
-				function (event) {
+				function (event: any) {
 					tmpEventfilt = event;
 					it('should be called "filt": ', function () {
 						tmpEventfilt.should.have.property("times", Infinity);
@@ -106,31 +107,20 @@ describe("normal event listener", function () {
 
 	it('test chain "all": ', function () {
 		expect(
-			dispatcher.all(
-				(event) => {
-					it("should be called: ", function () {
-						eventKey.should.be.equal("test");
-						event.should.have.property("target", 123);
-					});
+			dispatcher.all((event: any) => {
+				it("should be called: ", function () {
+					event.should.have.property("target", 123);
+				});
 
-					return false;
-				},
-				function (event) {
-					tmpEventfilt = event;
-					it('should be called "all": ', function () {
-						tmpEventfilt.should.have.property("times", Infinity);
-						tmpEventfilt.should.have.property("target", 1253);
-						tmpEventfilt.should.have.property("eventKey", "test");
-					});
-				}
-			)
+				return false;
+			})
 		).to.equal(dispatcher);
 	});
 
 	// ------------------
 
 	it("dispatch a event", function () {
-		expect(dispatcher.dispatchEvent("test", 123)).to.equal(dispatcher);
+		expect(dispatcher.fire("test", 123)).to.equal(dispatcher);
 	});
 
 	it("off a event", function () {
@@ -150,11 +140,11 @@ describe("normal event listener", function () {
 	});
 
 	it("dispatch a event", function () {
-		expect(dispatcher.dispatchEvent("test2", 111)).to.equal(dispatcher);
+		expect(dispatcher.fire("test2", 111)).to.equal(dispatcher);
 	});
 
 	it("dispatch a event", function () {
-		expect(dispatcher.dispatchEvent("test2", 111)).to.equal(dispatcher);
+		expect(dispatcher.fire("test2", 111)).to.equal(dispatcher);
 	});
 
 	it("once a event", function () {
@@ -186,10 +176,10 @@ describe("normal event listener", function () {
 	});
 
 	it("not listened", function () {
-		expect(dispatcher.dispatchEvent("abc", 123)).to.equal(dispatcher);
+		expect(dispatcher.fire("abc", 123)).to.equal(dispatcher);
 	});
 
-	const dispatcher2 = new EventDispatcher();
+	const dispatcher2 = new EventFirer();
 
 	dispatcher2.eventKeyList = ["hello"];
 
@@ -197,10 +187,82 @@ describe("normal event listener", function () {
 		expect(dispatcher2.checkEventKeyAvailable("hello")).to.equal(true);
 		expect(dispatcher2.checkEventKeyAvailable("hello2")).to.equal(false);
 
-		expect(dispatcher2.dispatchEvent("hello", 123)).to.equal(dispatcher2);
-		expect(dispatcher2.dispatchEvent("hello2", 123)).to.equal(dispatcher2);
+		expect(dispatcher2.fire("hello", 123)).to.equal(dispatcher2);
+		expect(dispatcher2.fire("hello2", 123)).to.equal(dispatcher2);
 
 		expect(dispatcher2.on("hello", () => {})).to.equal(dispatcher2);
 		expect(dispatcher2.on("hello2", () => {})).to.equal(dispatcher2);
+	});
+});
+
+describe("off event when fire", function () {
+	let c = 0;
+
+	class Test extends EventFirer {
+		public start = () => {
+			this.fire("aaa", { message: "aaa" });
+
+			return c;
+		};
+	}
+
+	const car = new Test();
+
+	const on1 = () => {
+		c++;
+	};
+
+	const on2 = () => {
+		c++;
+		car.off("aaa", on2);
+	};
+
+	const on3 = () => {
+		c++;
+	};
+
+	car.on("aaa", on1);
+	car.on("aaa", on2);
+	car.on("aaa", on3);
+
+	it("not listened", function () {
+		expect(car.start()).to.equal(3);
+	});
+});
+
+describe("fire and on multi events", function () {
+	let c = 0;
+
+	class Test extends EventFirer {
+		public start = () => {
+			this.fire(["aaa", "bbb"]);
+
+			return c;
+		};
+	}
+
+	const car = new Test();
+
+	const on1 = () => {
+		c++;
+	};
+
+	const on2 = () => {
+		c++;
+	};
+
+	car.on("aaa", on1);
+	car.on("bbb", on2);
+
+	it("fire 2 events", function () {
+		expect(car.start()).to.equal(2);
+	});
+
+	const car2 = new Test();
+
+	it("listen 2 events", function () {
+		c = 0;
+		car2.on(["aaa", "bbb"], on1);
+		expect(car2.start()).to.equal(2);
 	});
 });

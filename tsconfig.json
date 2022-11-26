@@ -9,11 +9,7 @@
 		"noUnusedParameters": true,
 		"noUnusedLocals": true,
 		"noImplicitAny": true,
-		"target": "esnext",
-		"lib": [
-			"dom",
-			"es2017"
-		]
+		"target": "esnext"
 	},
 	"include": [
         "src/**/*"

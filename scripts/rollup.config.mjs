@@ -5,14 +5,14 @@ export default {
 	input: "src/index.ts",
 	output: [
 		{
-			file: "build/EventDispatcher.legacy.js",
+			file: "build/EventFirer.js",
 			format: "umd",
 			indent: "\t",
-			name: "EventDispatcher",
+			name: "EventFirer",
 			sourcemap: true
 		},
 		{
-			file: "build/EventDispatcher.legacy.module.js",
+			file: "build/EventFirer.module.js",
 			format: "es",
 			indent: "\t",
 			sourcemap: false
@@ -21,7 +21,7 @@ export default {
 	plugins: [
 		json(),
 		typescript({
-			tsconfig: "./tsconfig.legacy.json"
+			tsconfig: "./tsconfig.json"
 		})
 	]
 };
