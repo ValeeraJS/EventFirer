@@ -1,28 +1,28 @@
-# EventDispatcher
+# EventFirer
 
 A light library for creating custom events.
 
 ## Install
 
-npm i @valeera/eventdispatcher
+npm i @valeera/eventfirer
 
 or
 
-yarn add @valeera/eventdispatcher
+yarn add @valeera/eventfirer
 
 ## Basic usage
 
 ```html
-<script src="EventDispatcher.js"></script>
+<script src="EventFirer.js"></script>
 <script>
 
-    class Car extends EventDispatcher {
+    class Car extends EventFirer {
         start = () => {
-            this.dispatchEvent('car-a', {message: 'aaa'});
-            this.dispatchEvent('car-b', {message: 'bbb'});
-            this.dispatchEvent('car-c', {message: 'ccc'});
-            this.dispatchEvent('bus-1', {message: '111'});
-            this.dispatchEvent('bus-2', {message: '222'});
+            this.fire('car-a', {message: 'aaa'});
+            this.fire('car-b', {message: 'bbb'});
+            this.fire('car-c', {message: 'ccc'});
+            this.fire('bus-1', {message: '111'});
+            this.fire('bus-2', {message: '222'});
         };
     }
 
