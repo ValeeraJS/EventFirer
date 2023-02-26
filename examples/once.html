@@ -2,7 +2,7 @@
 <script>
 	/* eslint-disable no-undef */
 	/* eslint-disable @typescript-eslint/explicit-member-accessibility */
-	class Car extends EventFirer {
+	class Car extends EventFire.EventFirer {
 		start = () => {
 			this.fire("car", { message: "aaa" });
 			this.fire("car", { message: "can't listen" });

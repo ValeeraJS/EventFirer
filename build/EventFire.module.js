@@ -1,13 +1,38 @@
+/******************************************************************************
+Copyright (c) Microsoft Corporation.
+
+Permission to use, copy, modify, and/or distribute this software for any
+purpose with or without fee is hereby granted.
+
+THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES WITH
+REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF MERCHANTABILITY
+AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY SPECIAL, DIRECT,
+INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES WHATSOEVER RESULTING FROM
+LOSS OF USE, DATA OR PROFITS, WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR
+OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
+PERFORMANCE OF THIS SOFTWARE.
+***************************************************************************** */
+
+function __decorate(decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+}
+
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-const mixin = (Base = Object, eventKeyList = []) => {
+const mixin = (Base = Object) => {
     return class EventFirer extends Base {
-        static mixin = mixin;
         #isFire = false;
         #fireIndex = -1;
         #offCount = new Map();
-        eventKeyList = eventKeyList;
-        filters = [];
-        listeners = new Map();
+        filters;
+        listeners;
+        constructor() {
+            super();
+            this.filters = [];
+            this.listeners = this["__proto__"].listeners ?? new Map();
+        }
         all(listener) {
             return this.filt(() => true, listener);
         }
@@ -37,10 +62,6 @@ const mixin = (Base = Object, eventKeyList = []) => {
                 return this;
             }
             this.#isFire = true;
-            if (!this.checkEventKeyAvailable(eventKey)) {
-                console.error("EventDispatcher couldn't dispatch the event since EventKeyList doesn't contains key: ", eventKey);
-                return this;
-            }
             const array = this.listeners.get(eventKey) || [];
             // let len = array.length;
             let item;
@@ -96,10 +117,6 @@ const mixin = (Base = Object, eventKeyList = []) => {
             return this.times(eventKey, 1, listener);
         }
         times(eventKey, times, listener) {
-            if (!this.checkEventKeyAvailable(eventKey)) {
-                console.error("EventDispatcher couldn't add the listener: ", listener, "since EventKeyList doesn't contains key: ", eventKey);
-                return this;
-            }
             const array = this.listeners.get(eventKey) || [];
             if (!this.listeners.has(eventKey)) {
                 this.listeners.set(eventKey, array);
@@ -118,14 +135,48 @@ const mixin = (Base = Object, eventKeyList = []) => {
             }
             return this;
         }
-        checkEventKeyAvailable(eventKey) {
-            if (this.eventKeyList.length) {
-                return this.eventKeyList.includes(eventKey);
-            }
-            return true;
-        }
     };
 };
-var EventDispatcher = mixin(Object);
+const EventFirer = mixin(Object);
 
-export { EventDispatcher as default };
+const fire = (eventName) => {
+    // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
+    return function (target, key) {
+        const func = target[key];
+        target[key] = function (...args) {
+            const v = func(...args);
+            this.fire(eventName, this);
+            return v;
+        };
+        return target[key];
+    };
+};
+
+const on = (eventName) => {
+    // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
+    return function (target, key) {
+        if (!target.listeners) {
+            target.listeners = new Map();
+        }
+        target.on(eventName, (...args) => {
+            target[key](...args);
+        });
+    };
+};
+
+class A extends EventFirer {
+    log(target) {
+        console.log(this, target);
+    }
+    dispatch() {
+        console.log("???");
+    }
+}
+__decorate([
+    on("aaa")
+], A.prototype, "log", null);
+__decorate([
+    fire("aaa")
+], A.prototype, "dispatch", null);
+
+export { A, EventFirer, mixin };

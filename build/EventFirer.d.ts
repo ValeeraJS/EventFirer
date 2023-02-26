@@ -1,12 +1,11 @@
 /// <reference types="chai" />
 import { TEventKey, TFilter, TListener, TListenersValue } from "./interfaces/IEventFirer";
 type Constructor<T = Object> = new (...a: any[]) => T;
-export declare const mixin: (Base?: Constructor, eventKeyList?: TEventKey[]) => {
-    new (...a: any[]): {
+export declare const mixin: (Base?: Constructor) => {
+    new (): {
         "__#5@#isFire": boolean;
         "__#5@#fireIndex": number;
         "__#5@#offCount": Map<TEventKey, number>;
-        eventKeyList: TEventKey[];
         filters: TFilter[];
         listeners: Map<TEventKey, TListenersValue>;
         all(listener: TListener): any;
@@ -19,7 +18,6 @@ export declare const mixin: (Base?: Constructor, eventKeyList?: TEventKey[]) => 
         once(eventKey: TEventKey, listener: TListener): any;
         times(eventKey: TEventKey, times: number, listener: TListener): any;
         checkFilt(eventKey: TEventKey, target: any): any;
-        checkEventKeyAvailable(eventKey: TEventKey): boolean;
         constructor: Function;
         toString(): string;
         toLocaleString(): string;
@@ -29,14 +27,12 @@ export declare const mixin: (Base?: Constructor, eventKeyList?: TEventKey[]) => 
         propertyIsEnumerable(v: PropertyKey): boolean;
         should: Chai.Assertion;
     };
-    mixin: any;
 };
-declare const _default: {
-    new (...a: any[]): {
+export declare const EventFirer: {
+    new (): {
         "__#5@#isFire": boolean;
         "__#5@#fireIndex": number;
         "__#5@#offCount": Map<TEventKey, number>;
-        eventKeyList: TEventKey[];
         filters: TFilter[];
         listeners: Map<TEventKey, TListenersValue>;
         all(listener: TListener): any;
@@ -49,7 +45,6 @@ declare const _default: {
         once(eventKey: TEventKey, listener: TListener): any;
         times(eventKey: TEventKey, times: number, listener: TListener): any;
         checkFilt(eventKey: TEventKey, target: any): any;
-        checkEventKeyAvailable(eventKey: TEventKey): boolean;
         constructor: Function;
         toString(): string;
         toLocaleString(): string;
@@ -59,6 +54,5 @@ declare const _default: {
         propertyIsEnumerable(v: PropertyKey): boolean;
         should: Chai.Assertion;
     };
-    mixin: (Base?: Constructor<Object>, eventKeyList?: TEventKey[]) => any;
 };
-export default _default;
+export {};

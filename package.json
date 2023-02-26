@@ -1,11 +1,11 @@
 {
-	"name": "@valeera/eventfirer",
+	"name": "@valeera/eventfire",
 	"version": "1.0.0",
 	"description": "Event dispatcher fit for most framework.",
-	"main": "build/EventFirer.js",
-	"repository": "ValeeraJS/EventFirer",
-	"jsnext:main": "build/EventFirer.module.js",
-	"module": "build/EventFirer.module.js",
+	"main": "build/EventFire.js",
+	"repository": "ValeeraJS/EventFire",
+	"jsnext:main": "build/EventFire.module.js",
+	"module": "build/EventFire.module.js",
 	"types": "build/index.d.ts",
 	"files": [
 		"build",
@@ -28,7 +28,7 @@
 		"travis": "npm run lint && npm test"
 	},
 	"keywords": [
-		"EventFirer",
+		"EventFire",
 		"utils",
 		"module",
 		"valeera",
@@ -65,9 +65,9 @@
 			"package.json",
 			"LICENSE",
 			"README.md",
-			"build/EventFirer.js",
-			"build/EventFirer.min.js",
-			"build/EventFirer.module.js"
+			"build/EventFire.js",
+			"build/EventFire.min.js",
+			"build/EventFire.module.js"
 		],
 		"directories": {}
 	},

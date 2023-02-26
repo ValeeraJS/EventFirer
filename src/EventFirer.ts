@@ -9,19 +9,21 @@ import IEventFirer, {
 type Constructor<T = Object> = new (...a: any[]) => T;
 
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-export const mixin = (Base: Constructor = Object, eventKeyList: TEventKey[] = []) => {
+export const mixin = (Base: Constructor = Object) => {
 	return class EventFirer extends Base implements IEventFirer {
-		public static mixin = mixin;
-
 		#isFire = false;
 		#fireIndex = -1;
 		#offCount: Map<TEventKey, number> = new Map();
 
-		public eventKeyList: TEventKey[] = eventKeyList;
+		public filters: TFilter[];
 
-		public filters: TFilter[] = [];
+		public listeners: Map<TEventKey, TListenersValue>;
 
-		public listeners: Map<TEventKey, TListenersValue> = new Map();
+		public constructor() {
+			super();
+			this.filters = [];
+			this.listeners = (this["__proto__" as keyof EventFirer] as any).listeners ?? new Map();
+		}
 
 		public all(listener: TListener) {
 			return this.filt(() => true, listener);
@@ -62,14 +64,6 @@ export const mixin = (Base: Constructor = Object, eventKeyList: TEventKey[] = []
 			}
 
 			this.#isFire = true;
-			if (!this.checkEventKeyAvailable(eventKey)) {
-				console.error(
-					"EventDispatcher couldn't dispatch the event since EventKeyList doesn't contains key: ",
-					eventKey
-				);
-
-				return this;
-			}
 			const array: TListenersValue = this.listeners.get(eventKey) || [];
 			// let len = array.length;
 			let item: IListenerItem;
@@ -141,16 +135,6 @@ export const mixin = (Base: Constructor = Object, eventKeyList: TEventKey[] = []
 		}
 
 		public times(eventKey: TEventKey, times: number, listener: TListener) {
-			if (!this.checkEventKeyAvailable(eventKey)) {
-				console.error(
-					"EventDispatcher couldn't add the listener: ",
-					listener,
-					"since EventKeyList doesn't contains key: ",
-					eventKey
-				);
-
-				return this;
-			}
 			const array: TListenersValue = this.listeners.get(eventKey) || [];
 
 			if (!this.listeners.has(eventKey)) {
@@ -173,15 +157,7 @@ export const mixin = (Base: Constructor = Object, eventKeyList: TEventKey[] = []
 
 			return this;
 		}
-
-		public checkEventKeyAvailable(eventKey: TEventKey) {
-			if (this.eventKeyList.length) {
-				return this.eventKeyList.includes(eventKey);
-			}
-
-			return true;
-		}
 	};
 };
 
-export default mixin(Object);
+export const EventFirer = mixin(Object);

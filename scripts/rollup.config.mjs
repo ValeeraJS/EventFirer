@@ -5,14 +5,14 @@ export default {
 	input: "src/index.ts",
 	output: [
 		{
-			file: "build/EventFirer.js",
+			file: "build/EventFire.js",
 			format: "umd",
 			indent: "\t",
-			name: "EventFirer",
-			sourcemap: true
+			name: "EventFire",
+			sourcemap: false
 		},
 		{
-			file: "build/EventFirer.module.js",
+			file: "build/EventFire.module.js",
 			format: "es",
 			indent: "\t",
 			sourcemap: false

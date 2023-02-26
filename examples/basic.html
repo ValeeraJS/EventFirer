@@ -1,8 +1,8 @@
-<script src="../build/EventFirer.js"></script>
+<script src="../build/EventFire.js"></script>
 <script>
 	/* eslint-disable no-undef */
 	/* eslint-disable @typescript-eslint/explicit-member-accessibility */
-	class Car extends EventFirer {
+	class Car extends EventFire.EventFirer {
 		start = () => {
 			this.fire("car-a", { message: "aaa" });
 			this.fire("car-b", { message: "bbb" });

@@ -6,7 +6,7 @@
 		isAnimal = true;
 	}
 
-	class Car extends EventFirer.mixin(Animal) {
+	class Car extends EventFire.mixin(Animal) {
 		start = () => {
 			this.fire("car-a", { message: "aaa" });
 			this.fire("car-b", { message: "bbb" });
