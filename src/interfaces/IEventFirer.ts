@@ -1,9 +1,6 @@
-/**
- * The object received by the listener
- */
 export type TEventKey = string | number | Symbol;
-
 export type TListener = (event?: any) => any;
+export type TEventFilter = (event: TEventKey, target: any) => boolean;
 export type TListenerFilter = (event?: any, eventKey?: TEventKey) => any;
 
 export interface IListenerItem {
@@ -12,13 +9,13 @@ export interface IListenerItem {
 }
 
 export interface TFilter {
-	rule: Function;
+	rule: TEventFilter;
 	listener: TListenerFilter;
 }
 
 export type TListenersValue = Array<IListenerItem>;
 
-export default interface IEventFirer {
+export interface IEventFirer {
 	/**
 	 * listen all events whatever event key
 	 */
