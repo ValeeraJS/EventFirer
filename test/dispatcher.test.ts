@@ -1,5 +1,6 @@
 /* eslint-disable max-nested-callbacks */
-import EventFirer from "../src/EventFirer";
+import { EventFirer, mixin } from "../src/EventFirer";
+import { all, eventfirer, fire, on, once, times } from "../src/decorators";
 import { expect } from "chai";
 
 let tmpEventOnTest: any, tmpEventAll: any, tmpEventfilt: any;
@@ -178,21 +179,6 @@ describe("normal event listener", function () {
 	it("not listened", function () {
 		expect(dispatcher.fire("abc", 123)).to.equal(dispatcher);
 	});
-
-	const dispatcher2 = new EventFirer();
-
-	dispatcher2.eventKeyList = ["hello"];
-
-	it("not listened", function () {
-		expect(dispatcher2.checkEventKeyAvailable("hello")).to.equal(true);
-		expect(dispatcher2.checkEventKeyAvailable("hello2")).to.equal(false);
-
-		expect(dispatcher2.fire("hello", 123)).to.equal(dispatcher2);
-		expect(dispatcher2.fire("hello2", 123)).to.equal(dispatcher2);
-
-		expect(dispatcher2.on("hello", () => {})).to.equal(dispatcher2);
-		expect(dispatcher2.on("hello2", () => {})).to.equal(dispatcher2);
-	});
 });
 
 describe("off event when fire", function () {
@@ -264,5 +250,250 @@ describe("fire and on multi events", function () {
 		c = 0;
 		car2.on(["aaa", "bbb"], on1);
 		expect(car2.start()).to.equal(2);
+	});
+});
+
+@eventfirer
+class A {
+	public a = 0;
+	@fire("aaa")
+	public dispatch() {
+		this.a = 1;
+
+		return this.a;
+	}
+
+	@on("aaa")
+	public log() {
+		this.a = 2;
+
+		return this.a;
+	}
+}
+
+@eventfirer
+class AA {
+	public a = 0;
+	public dispatch() {
+		this.a = 1;
+
+		return this.a;
+	}
+
+	public log() {
+		this.a = 2;
+
+		return this.a;
+	}
+}
+
+class B {
+	public a = 0;
+	@fire("aaa")
+	public dispatch() {
+		this.a = 1;
+
+		return this.a;
+	}
+
+	@all
+	public dispatch2() {
+		this.a = 1;
+
+		return this.a;
+	}
+
+	@all
+	public dispatch3() {
+		this.a = 1;
+
+		return this.a;
+	}
+
+	@on("aaa")
+	public log() {
+		this.a = 2;
+
+		return this.a;
+	}
+
+	@on("bbb")
+	public bLog() {
+		this.a = 3;
+
+		return this.a;
+	}
+}
+
+describe("Decorators", function () {
+	it("with eventfirer decorator", function () {
+		const a = new A();
+
+		const v = a.dispatch();
+
+		expect(a.a).to.equal(2);
+		expect(v).to.equal(1);
+	});
+	it("without eventfirer decorator", function () {
+		const a = new B();
+
+		a.dispatch();
+		expect(a.a).to.equal(1);
+	});
+	it("without event", function () {
+		const a = new AA();
+
+		expect(a.a).to.equal(0);
+	});
+
+	it("times", function () {
+		@eventfirer
+		class AA {
+			public a = 0;
+			public b = 0;
+			@times("a", 2)
+			public add() {
+				this.a++;
+			}
+
+			@times("a")
+			public add2() {
+				this.b++;
+			}
+
+			@fire("a")
+			public dispatch() {}
+		}
+		const a = new AA();
+
+		a.dispatch();
+		a.dispatch();
+		a.dispatch();
+
+		expect(a.a).to.equal(2);
+		expect(a.b).to.equal(3);
+	});
+
+	it("once", function () {
+		@eventfirer
+		class AA {
+			public a = 0;
+			@once("a")
+			public add() {
+				this.a++;
+			}
+
+			@fire("a")
+			public dispatch() {}
+		}
+		const a = new AA();
+
+		a.dispatch();
+		a.dispatch();
+		a.dispatch();
+
+		expect(a.a).to.equal(1);
+	});
+
+	it("filt", function () {
+		@eventfirer
+		class AA {
+			public a = 0;
+			@all
+			public add() {
+				this.a++;
+			}
+
+			@fire("a")
+			public dispatch() {}
+		}
+		const a = new AA();
+
+		a.dispatch();
+		a.dispatch();
+		a.dispatch();
+
+		expect(a.a).to.equal(3);
+	});
+});
+
+describe("Mixin", function () {
+	it("Mixin without class", function () {
+		const A = mixin();
+		const a = new A();
+
+		expect(typeof a.on).to.equal("function");
+	});
+});
+
+describe("Check duplicate", function () {
+	it("Listen duplicate", function () {
+		const a = new EventFirer();
+		let n = 0;
+
+		function add() {
+			++n;
+		}
+
+		a.on("a", add, true);
+		a.on("a", add, true);
+		a.fire("a");
+
+		expect(n).to.equal(1);
+	});
+	it("Listen duplicate2", function () {
+		const a = new EventFirer();
+		let n = 0;
+
+		function add() {
+			++n;
+		}
+
+		a.on("a", add, true);
+		a.on(
+			"a",
+			() => {
+				++n;
+			},
+			true
+		);
+		a.fire("a");
+
+		expect(n).to.equal(2);
+	});
+	it("Filt duplicate", function () {
+		const a = new EventFirer();
+		let n = 0;
+
+		function add() {
+			++n;
+		}
+
+		a.all(add, true);
+		a.all(add, true);
+		a.fire("a");
+
+		expect(n).to.equal(1);
+	});
+
+	it("Filt duplicate2", function () {
+		const a = new EventFirer();
+		let n = 0;
+
+		function add() {
+			++n;
+		}
+
+		a.all(add, true);
+		a.filt(
+			() => {
+				return true;
+			},
+			add,
+			true
+		);
+		a.fire("a");
+
+		expect(n).to.equal(2);
 	});
 });

@@ -1,23 +1,23 @@
-/**
- * The object received by the listener
- */
 export type TEventKey = string | number | Symbol;
 export type TListener = (event?: any) => any;
+export type TEventFilter = (event: TEventKey, target: any) => boolean;
 export type TListenerFilter = (event?: any, eventKey?: TEventKey) => any;
 export interface IListenerItem {
     listener: TListener;
     times: number;
 }
 export interface TFilter {
-    rule: Function;
+    rule: TEventFilter;
     listener: TListenerFilter;
 }
 export type TListenersValue = Array<IListenerItem>;
-export default interface IEventFirer {
+export interface IEventFirer {
+    filters: TFilter[];
+    listeners: Map<TEventKey, TListenersValue>;
     /**
      * listen all events whatever event key
      */
-    all: (listener: TListener) => this;
+    all: (listener: TListener, checkDuplicate?: boolean) => this;
     /**
      * remove all listeners according to event key
      */
@@ -29,7 +29,7 @@ export default interface IEventFirer {
     /**
      * judge the event key and target arrording to the custom rule
      */
-    filt: (rule: Function, listener: TListener) => this;
+    filt: (rule: Function, listener: TListener, checkDuplicate?: boolean) => this;
     /**
      * fire a custom event
      */
@@ -37,7 +37,7 @@ export default interface IEventFirer {
     /**
      * add an event listener
      */
-    on: (eventKey: TEventKey, listener: TListener) => this;
+    on: (eventKey: TEventKey, listener: TListener, checkDuplicate?: boolean) => this;
     /**
      * delete an event listener
      */
@@ -45,9 +45,9 @@ export default interface IEventFirer {
     /**
      * add an event listener and the listener only listen to the event one time
      */
-    once: (eventKey: TEventKey, listener: TListener) => this;
+    once: (eventKey: TEventKey, listener: TListener, checkDuplicate?: boolean) => this;
     /**
      * add an event listener and the listener listen to the event several times
      */
-    times: (eventKey: TEventKey, times: number, listener: TListener) => this;
+    times: (eventKey: TEventKey, times: number, listener: TListener, checkDuplicate?: boolean) => this;
 }

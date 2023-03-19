@@ -16,10 +16,12 @@ export interface TFilter {
 export type TListenersValue = Array<IListenerItem>;
 
 export interface IEventFirer {
+	filters: TFilter[];
+	listeners: Map<TEventKey, TListenersValue>;
 	/**
 	 * listen all events whatever event key
 	 */
-	all: (listener: TListener) => this;
+	all: (listener: TListener, checkDuplicate?: boolean) => this;
 
 	/**
 	 * remove all listeners according to event key
@@ -34,7 +36,7 @@ export interface IEventFirer {
 	/**
 	 * judge the event key and target arrording to the custom rule
 	 */
-	filt: (rule: Function, listener: TListener) => this;
+	filt: (rule: Function, listener: TListener, checkDuplicate?: boolean) => this;
 
 	/**
 	 * fire a custom event
@@ -44,7 +46,7 @@ export interface IEventFirer {
 	/**
 	 * add an event listener
 	 */
-	on: (eventKey: TEventKey, listener: TListener) => this;
+	on: (eventKey: TEventKey, listener: TListener, checkDuplicate?: boolean) => this;
 
 	/**
 	 * delete an event listener
@@ -54,10 +56,15 @@ export interface IEventFirer {
 	/**
 	 * add an event listener and the listener only listen to the event one time
 	 */
-	once: (eventKey: TEventKey, listener: TListener) => this;
+	once: (eventKey: TEventKey, listener: TListener, checkDuplicate?: boolean) => this;
 
 	/**
 	 * add an event listener and the listener listen to the event several times
 	 */
-	times: (eventKey: TEventKey, times: number, listener: TListener) => this;
+	times: (
+		eventKey: TEventKey,
+		times: number,
+		listener: TListener,
+		checkDuplicate?: boolean
+	) => this;
 }

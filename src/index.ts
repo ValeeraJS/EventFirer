@@ -1,3 +1,3 @@
 export * from "./decorators";
-export * from "./mixin";
+export * from "./EventFirer";
 export * from "./interfaces/IEventFirer";
