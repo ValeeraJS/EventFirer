@@ -1,6 +1,10 @@
-import { TEventKey } from "./interfaces/IEventFirer";
+import { TEventFilter, TEventKey } from "./interfaces/IEventFirer";
 type Constructor<T = Object> = new (...a: any[]) => T;
 export declare function eventfirer(constructor: Constructor): any;
 export declare const fire: (eventName: TEventKey) => (target: any, key: string | symbol) => any;
+export declare const times: (eventName: TEventKey, times?: number) => (target: any, key: string | symbol) => any;
 export declare const on: (eventName: TEventKey) => (target: any, key: string | symbol) => any;
+export declare const once: (eventName: TEventKey) => (target: any, key: string | symbol) => any;
+export declare const filt: (rule: TEventFilter) => (target: any, key: string | symbol) => any;
+export declare const all: (target: any, key: string | symbol) => any;
 export {};

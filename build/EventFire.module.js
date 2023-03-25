@@ -14,8 +14,8 @@ const mixin = (Base = Object) => {
     return class EventFirer extends Base {
         filters;
         listeners;
-        constructor() {
-            super();
+        constructor(...args) {
+            super(...args);
             this.filters = [];
             this.listeners = new Map();
             RefWeakMap.set(this, {
@@ -151,7 +151,13 @@ function eventfirer(constructor) {
             const arr = ClassOnKeyMap.get(constructor);
             if (arr) {
                 for (let i = 0, len = arr.length; i < len; i++) {
-                    firer.on(arr[i].eventName, obj[arr[i].method].bind(obj));
+                    firer.times(arr[i].eventName, arr[i].times, obj[arr[i].method].bind(obj));
+                }
+            }
+            const arr2 = ClassFiltMap.get(constructor);
+            if (arr2) {
+                for (let i = 0, len = arr2.length; i < len; i++) {
+                    firer.filt(arr2[i].rule, obj[arr2[i].method].bind(obj));
                 }
             }
             return obj;
@@ -164,7 +170,6 @@ const fire = (eventName) => {
         const func = target[key];
         target[key] = function (...args) {
             const v = func.call(this, ...args);
-            console.log(RefEventFirerMap.get(this));
             RefEventFirerMap.get(this)?.fire(eventName, this);
             return v;
         };
@@ -172,7 +177,7 @@ const fire = (eventName) => {
     };
 };
 const ClassOnKeyMap = new WeakMap();
-const on = (eventName) => {
+const times = (eventName, times = Infinity) => {
     // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
     return function (target, key) {
         let arr = ClassOnKeyMap.get(target.constructor);
@@ -182,9 +187,35 @@ const on = (eventName) => {
         }
         arr.push({
             eventName,
-            method: key
+            method: key,
+            times
         });
     };
 };
+// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
+const on = (eventName) => {
+    return times(eventName, Infinity);
+};
+// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
+const once = (eventName) => {
+    return times(eventName, 1);
+};
+const ClassFiltMap = new WeakMap();
+const filt = (rule) => {
+    // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
+    return function (target, key) {
+        let arr = ClassFiltMap.get(target.constructor);
+        if (!arr) {
+            arr = [];
+            ClassFiltMap.set(target.constructor, arr);
+        }
+        arr.push({
+            method: key,
+            rule
+        });
+    };
+};
+// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
+const all = filt(allFilter);
 
-export { EventFirer, eventfirer, fire, mixin, on };
+export { EventFirer, all, eventfirer, filt, fire, mixin, on, once, times };

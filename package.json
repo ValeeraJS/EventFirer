@@ -1,6 +1,6 @@
 {
 	"name": "@valeera/eventfire",
-	"version": "1.1.0",
+	"version": "1.1.1",
 	"description": "Event dispatcher fit for most framework.",
 	"main": "build/EventFire.js",
 	"repository": "ValeeraJS/EventFire",

@@ -10,7 +10,7 @@ import {
 	TListenersValue
 } from "./interfaces/IEventFirer";
 
-type Constructor<T = Object> = new (...a: any[]) => T;
+type Constructor = new (...args: any[]) => {};
 
 function checkFilt(firer: IEventFirer, eventKey: TEventKey, target: any) {
 	for (const item of firer.filters) {
@@ -23,13 +23,13 @@ function checkFilt(firer: IEventFirer, eventKey: TEventKey, target: any) {
 }
 
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-export const mixin = (Base: Constructor = Object) => {
+export const mixin = <TBase extends Constructor>(Base: TBase = Object as any) => {
 	return class EventFirer extends Base implements IEventFirer {
 		public filters: TFilter[];
 		public listeners: Map<TEventKey, TListenersValue>;
 
-		public constructor() {
-			super();
+		public constructor(...args: any[]) {
+			super(...args);
 			this.filters = [];
 			this.listeners = new Map();
 			RefWeakMap.set(this, {

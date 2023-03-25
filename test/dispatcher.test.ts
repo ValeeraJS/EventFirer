@@ -424,6 +424,15 @@ describe("Mixin", function () {
 
 		expect(typeof a.on).to.equal("function");
 	});
+	it("Mixin with class", function () {
+		class TTT {
+			ttt() {}
+		}
+		const A = mixin(TTT);
+		const a = new A();
+
+		expect(typeof a.ttt).to.equal("function");
+	});
 });
 
 describe("Check duplicate", function () {
